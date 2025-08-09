@@ -35,7 +35,7 @@ from django.http import HttpResponse
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth import login
 from django.contrib.auth.decorators import login_required
-from .models import Camiseta, Familiar, Compra
+from .models import Camiseta, Cliente, Compra
 
 # --- VISTA DE HISTORIAL DE COMPRAS ---
 @login_required
@@ -78,35 +78,13 @@ def agregar_cliente(request):
     if request.method == "POST":
         nombre = request.POST.get("nombre")
         apellido = request.POST.get("apellido")
-        if nombre and apellido:
-            Familiar.objects.create(nombre=nombre, apellido=apellido, edad=0, parentesco="", fecha_nacimiento="2000-01-01")
+        email = request.POST.get("email", "")
+        telefono = request.POST.get("telefono", "")
+        if nombre and apellido and email:
+            Cliente.objects.create(nombre=nombre, apellido=apellido, email=email, telefono=telefono)
             mensaje = f"Cliente {nombre} {apellido} agregado con éxito."
     return render(request, 'mi_primer_app/agregar-clientes.html', {"mensaje": mensaje})
 
-def crear_familiar(request):
-    mensaje = ""
-    if request.method == "POST":
-        nombre = request.POST.get("nombre")
-        apellido = request.POST.get("apellido")
-        edad = request.POST.get("edad")
-        fecha_nacimiento = request.POST.get("fecha_nacimiento")
-        parentesco = request.POST.get("parentesco")
-        telefono = request.POST.get("telefono")
-        if nombre and apellido:
-            Familiar.objects.create(
-                nombre=nombre,
-                apellido=apellido,
-                edad=edad or 0,
-                fecha_nacimiento=fecha_nacimiento or "2000-01-01",
-                parentesco=parentesco or "",
-                telefono=telefono or ""
-            )
-            mensaje = f"Familiar {nombre} {apellido} agregado con éxito."
-    return render(request, 'mi_primer_app/crear-familiar.html', {"mensaje": mensaje})
-
-def listar_familiares(request):
-    familiares = Familiar.objects.all()
-    return render(request, 'mi_primer_app/listar-familiares.html', {"familiares": familiares})
 
 # --- OTRAS VISTAS ---
 def home(request):
