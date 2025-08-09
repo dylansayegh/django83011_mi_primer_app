@@ -1,0 +1,22 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h2 style="color:#0056b3;">Catálogo de camisetas retro</h2>
+<div style="display:flex;flex-wrap:wrap;gap:2em;">
+  {% for camiseta in camisetas %}
+  <div style="background:white;border-radius:10px;box-shadow:0 0 8px #ccc;padding:1em;width:260px;">
+    {% if camiseta.imagen %}
+      <img src="{{ camiseta.imagen }}" alt="{{ camiseta.equipo }}" style="width:220px;height:220px;object-fit:cover;border-radius:8px;">
+    {% else %}
+      <div style="width:220px;height:220px;background:#eee;border-radius:8px;display:flex;align-items:center;justify-content:center;color:#888;">Sin imagen</div>
+    {% endif %}
+    <h3 style="margin:0.5em 0 0 0;">{{ camiseta.equipo }} <span style="color:#007bff">{{ camiseta.temporada }}</span></h3>
+    <p style="margin:0.2em 0;">Talla: <b>{{ camiseta.talla }}</b></p>
+    <p style="margin:0.2em 0;">Precio: <b>${{ camiseta.precio }}</b></p>
+    <a href="/comprar-camiseta/{{ camiseta.id }}/" style="background:#28a745;color:white;padding:0.5em 1em;border-radius:5px;text-decoration:none;font-weight:bold;">Comprar</a>
+  </div>
+  {% endfor %}
+</div>
+{% if camisetas|length == 0 %}
+<p>No hay camisetas en stock.</p>
+{% endif %}
+{% endblock %}

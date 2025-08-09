@@ -60,5 +60,19 @@ Este proyecto es una web de ejemplo desarrollada en Django, con herencia de plan
 - Puedes modificar los modelos y vistas para agregar más funcionalidades.
 - El menú principal te permite navegar por todas las secciones.
 
+# Proyecto Django 83010
+Proyecto hecho en django, para ejecutar hace falta seguir estos comandos: 
+
+python manage.py makemigrations
+python manage.py migrate
+python manage.py runserver
+
+
+Es necesario tener instalado Django: 
+
+pip install django
+
+## Video
+link al video: https//:youbtube.com/video
 ---
 ¡Listo para entregar y subir a GitHub!

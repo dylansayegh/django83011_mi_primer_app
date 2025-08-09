@@ -1,3 +1,25 @@
+# --- VISTAS DE MENÚ PARA PÁGINAS CON DISEÑO ---
+def pagina_inicio(request):
+    return render(request, 'mi_primer_app/inicio.html')
+
+def pagina_camisetas(request):
+    camisetas = Camiseta.objects.all()
+    return render(request, 'mi_primer_app/camisetas.html', {'camisetas': camisetas})
+
+def pagina_login(request):
+    return render(request, 'mi_primer_app/login.html')
+
+def pagina_logout(request):
+    return render(request, 'mi_primer_app/logout.html')
+
+def pagina_registro(request):
+    return render(request, 'mi_primer_app/registro.html')
+
+def pagina_mis_compras(request):
+    return render(request, 'mi_primer_app/mis-compras.html')
+
+def pagina_buscar_camisetas(request):
+    return render(request, 'mi_primer_app/buscar-camisetas.html')
 # --- VISTA DE BÚSQUEDA DE CAMISETAS ---
 def buscar_camisetas(request):
     resultados = []
