@@ -1,0 +1,22 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h2>Camisetas de fútbol retro</h2>
+<div style="display:flex; flex-wrap:wrap; gap:2em;">
+    {% for camiseta in camisetas %}
+    <div style="border:1px solid #ccc; padding:1em; width:220px; background:#fff;">
+        {% if camiseta.imagen %}
+        <img src="{{ camiseta.imagen }}" alt="{{ camiseta.equipo }}" style="width:200px; height:auto;">
+        {% endif %}
+        <h3>{{ camiseta.equipo }} {{ camiseta.temporada }}</h3>
+        <p>Talla: {{ camiseta.talla }}</p>
+        <p>Precio: ${{ camiseta.precio }}</p>
+        <p>{{ camiseta.descripcion }}</p>
+        {% if user.is_authenticated %}
+        <a href="/comprar-camiseta/{{ camiseta.id }}/"><button>Comprar</button></a>
+        {% else %}
+        <a href="/login/">Inicia sesión para comprar</a>
+        {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

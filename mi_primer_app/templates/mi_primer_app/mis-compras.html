@@ -1,0 +1,30 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h2>Mis compras</h2>
+{% if compras %}
+<table style="width:100%; border-collapse:collapse;">
+    <tr style="background:#0056b3; color:white;">
+        <th>Camiseta</th>
+        <th>Equipo</th>
+        <th>Temporada</th>
+        <th>Talla</th>
+        <th>Cantidad</th>
+        <th>Precio unitario</th>
+        <th>Fecha</th>
+    </tr>
+    {% for compra in compras %}
+    <tr style="background:#f8f9fa;">
+        <td>{{ compra.camiseta }}</td>
+        <td>{{ compra.camiseta.equipo }}</td>
+        <td>{{ compra.camiseta.temporada }}</td>
+        <td>{{ compra.camiseta.talla }}</td>
+        <td>{{ compra.cantidad }}</td>
+        <td>${{ compra.camiseta.precio }}</td>
+        <td>{{ compra.fecha|date:"d/m/Y H:i" }}</td>
+    </tr>
+    {% endfor %}
+</table>
+{% else %}
+<p>No has realizado compras aún.</p>
+{% endif %}
+{% endblock %}

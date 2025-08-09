@@ -1,0 +1,15 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h2>Compra de camiseta</h2>
+{% if mensaje %}
+    <p style="color:green">{{ mensaje }}</p>
+    <a href="/camisetas/">Volver a la tienda</a>
+{% else %}
+    <h3>{{ camiseta.equipo }} {{ camiseta.temporada }}</h3>
+    <form method="post">
+        {% csrf_token %}
+        <label>Cantidad: <input type="number" name="cantidad" value="1" min="1"></label><br>
+        <button type="submit">Confirmar compra</button>
+    </form>
+{% endif %}
+{% endblock %}

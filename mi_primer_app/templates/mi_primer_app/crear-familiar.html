@@ -1,0 +1,16 @@
+{% extends "mi_primer_app/padre.html" %}
+{% block title %}Crear Familiar{% endblock %}
+{% block content %}
+<h2>Agregar Familiar</h2>
+<form method="post">
+    {% csrf_token %}
+    <label>Nombre: <input type="text" name="nombre" required></label><br>
+    <label>Apellido: <input type="text" name="apellido" required></label><br>
+    <label>Edad: <input type="number" name="edad"></label><br>
+    <label>Fecha de nacimiento: <input type="date" name="fecha_nacimiento"></label><br>
+    <label>Parentesco: <input type="text" name="parentesco"></label><br>
+    <label>Teléfono: <input type="text" name="telefono"></label><br>
+    <button type="submit">Agregar</button>
+</form>
+{% if mensaje %}<p style="color:green">{{ mensaje }}</p>{% endif %}
+{% endblock %}

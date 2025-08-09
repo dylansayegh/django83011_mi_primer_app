@@ -1,0 +1,32 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Mi sitio Django{% endblock %}</title>
+    <style>
+        body { font-family: Arial, sans-serif; background: #f8f9fa; margin: 0; }
+        header, nav, footer { background: #007bff; color: white; padding: 1em; }
+        nav { background: #0056b3; }
+        nav a { color: white; margin-right: 20px; text-decoration: none; }
+        main { padding: 2em; }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Mi sitio Django</h1>
+    </header>
+    <nav>
+        <a href="/">Inicio</a>
+        <a href="/camisetas/">Camisetas</a>
+        <a href="/login/">Iniciar sesión</a>
+        <a href="/logout/">Cerrar sesión</a>
+        <a href="/registro/">Registrarse</a>
+        <a href="/mis-compras/">Mis compras</a>
+        <a href="/buscar-camisetas/">Buscar camisetas</a>
+    </nav>
+    <footer>
+        &copy; 2025 Mi tienda de camisetas retro
+    </footer>
+</body>
+</html>
+
