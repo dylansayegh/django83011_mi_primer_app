@@ -1,0 +1,10 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h1>{% if form.instance.pk %}Editar{% else %}Crear{% endif %} Página</h1>
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+  {{ form.as_p }}
+  <button type="submit">Guardar</button>
+</form>
+<a href="{% url 'pages-list' %}">Volver al listado</a>
+{% endblock %}

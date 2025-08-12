@@ -1,0 +1,9 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h1>¿Seguro que deseas borrar esta página?</h1>
+<p>{{ page.titulo }}</p>
+<form method="post">{% csrf_token %}
+  <button type="submit">Sí, borrar</button>
+  <a href="{% url 'pages-list' %}">Cancelar</a>
+</form>
+{% endblock %}

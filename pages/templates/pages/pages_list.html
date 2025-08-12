@@ -1,0 +1,21 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h1>Páginas</h1>
+{% if pages %}
+  <ul>
+    {% for page in pages %}
+      <li>
+        <a href="{{ page.get_absolute_url }}">{{ page.titulo }}</a> - {{ page.subtitulo }}
+        <a href="{% url 'page-detail' page.pk %}">Leer más</a>
+        {% if user.is_authenticated and page.autor == user %}
+          | <a href="{% url 'page-update' page.pk %}">Editar</a>
+          | <a href="{% url 'page-delete' page.pk %}">Borrar</a>
+        {% endif %}
+      </li>
+    {% endfor %}
+  </ul>
+{% else %}
+  <p>No hay páginas aún.</p>
+{% endif %}
+<a href="{% url 'page-create' %}">Crear nueva página</a>
+{% endblock %}

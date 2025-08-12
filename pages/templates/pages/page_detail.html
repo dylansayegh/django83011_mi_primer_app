@@ -1,0 +1,11 @@
+{% extends 'mi_primer_app/padre.html' %}
+{% block contenido %}
+<h1>{{ page.titulo }}</h1>
+<h3>{{ page.subtitulo }}</h3>
+<p>{{ page.contenido }}</p>
+{% if page.imagen %}
+  <img src="{{ page.imagen.url }}" alt="Imagen de la página" style="max-width:400px;">
+{% endif %}
+<p>Publicado por {{ page.autor }} el {{ page.fecha_publicacion }}</p>
+<a href="{% url 'pages-list' %}">Volver al listado</a>
+{% endblock %}

@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'mi_primer_app',  # Asegúrate de que tu aplicación esté registrada aquí
+    'pages',
 ]
 
 MIDDLEWARE = [
