@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 # Mi tienda de camisetas retro - Proyecto Django
 
 ## Descripción
@@ -76,3 +77,6 @@ pip install django
 link al video: https//:youbtube.com/video
 ---
 ¡Listo para entregar y subir a GitHub!
+=======
+# django83011_mi_primer_app
+>>>>>>> 82c9e2039e53aeb69da1dd577f6425c7a3142555
