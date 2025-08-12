@@ -7,6 +7,7 @@ class Page(models.Model):
     contenido = models.TextField()
     imagen = models.ImageField(upload_to='pages/', blank=True, null=True)
     fecha_publicacion = models.DateTimeField(auto_now_add=True)
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
     autor = models.ForeignKey(User, on_delete=models.CASCADE)
 
     def __str__(self):
