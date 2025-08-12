@@ -21,13 +21,8 @@ urlpatterns = [
     path('mis-ordenes/', views.mis_ordenes, name='mis_ordenes'),
     
     # Rutas legacy mantenidas para compatibilidad
-    path('login/', views.pagina_login, name='login_legacy'),
-    path('logout/', views.pagina_logout, name='logout_legacy'),
-    path('registro/', views.pagina_registro, name='registro'),
     path('mis-compras/', views.mis_compras, name='mis-compras'),
     path('buscar-camisetas/', views.buscar_camisetas, name='buscar-camisetas'),
-    
-    # Rutas originales para funcionalidad completa
     path('hola-mundo/', views.hola_mundo, name='hola-mundo'),
     path('agregar-cliente/', views.agregar_cliente, name='agregar-cliente'),
     path('comprar-camiseta/<int:camiseta_id>/', views.comprar_camiseta, name='comprar-camiseta'),

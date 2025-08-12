@@ -1,34 +1,3 @@
-# --- VISTAS DE MENÚ PARA PÁGINAS CON DISEÑO ---
-def pagina_inicio(request):
-    return render(request, 'mi_primer_app/inicio.html')
-
-def pagina_camisetas(request):
-    camisetas = Camiseta.objects.all()
-    return render(request, 'mi_primer_app/camisetas.html', {'camisetas': camisetas})
-
-def pagina_login(request):
-    return render(request, 'mi_primer_app/login.html')
-
-def pagina_logout(request):
-    return render(request, 'mi_primer_app/logout.html')
-
-def pagina_registro(request):
-    return render(request, 'mi_primer_app/registro.html')
-
-def pagina_mis_compras(request):
-    return render(request, 'mi_primer_app/mis-compras.html')
-
-def pagina_buscar_camisetas(request):
-    return render(request, 'mi_primer_app/buscar-camisetas.html')
-# --- VISTA DE BÚSQUEDA DE CAMISETAS ---
-def buscar_camisetas(request):
-    resultados = []
-    query = ""
-    if request.method == "GET" and "equipo" in request.GET:
-        query = request.GET.get("equipo", "")
-        resultados = Camiseta.objects.filter(equipo__icontains=query)
-    return render(request, 'mi_primer_app/buscar-camisetas.html', {"resultados": resultados, "query": query})
-
 # --- IMPORTS ---
 from django.shortcuts import render, redirect, get_object_or_404
 from django.http import HttpResponse, JsonResponse
@@ -40,6 +9,28 @@ from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from .models import Camiseta, Cliente, Compra, Carrito, ItemCarrito, Orden, ItemOrden
 import json
+import uuid
+
+# --- VISTAS PRINCIPALES ---
+def pagina_inicio(request):
+    """Vista de la página de inicio"""
+    return render(request, 'mi_primer_app/inicio.html')
+
+def pagina_camisetas(request):
+    """Vista del catálogo de camisetas"""
+    camisetas = Camiseta.objects.filter(activa=True).order_by('equipo', 'temporada')
+    return render(request, 'mi_primer_app/camisetas.html', {'camisetas': camisetas})
+
+def detalle_camiseta(request, camiseta_id):
+    """Vista de detalle de una camiseta específica"""
+    camiseta = get_object_or_404(Camiseta, id=camiseta_id, activa=True)
+    return render(request, 'mi_primer_app/detalle_camiseta.html', {'camiseta': camiseta})
+
+# --- UTILIDAD PARA CARRITO ---
+def obtener_o_crear_carrito(usuario):
+    """Obtiene o crea un carrito para el usuario"""
+    carrito, created = Carrito.objects.get_or_create(usuario=usuario)
+    return carrito
 
 # --- VISTA DE HISTORIAL DE COMPRAS ---
 @login_required
@@ -87,12 +78,15 @@ def agregar_cliente(request):
         if nombre and apellido and email:
             Cliente.objects.create(nombre=nombre, apellido=apellido, email=email, telefono=telefono)
             mensaje = f"Cliente {nombre} {apellido} agregado con éxito."
-    return render(request, 'mi_primer_app/agregar-clientes.html', {"mensaje": mensaje})
+        else:
+            mensaje = "Por favor complete todos los campos requeridos."
+    return render(request, 'mi_primer_app/agregar-cliente.html', {"mensaje": mensaje})
 
 
 # --- OTRAS VISTAS ---
 def home(request):
-    return render(request, 'mi_primer_app/home.html')
+    """Vista alternativa para la página de inicio"""
+    return render(request, 'mi_primer_app/inicio.html')
 
 def hola_mundo(request):
     print("¡Hola, mundo!")
@@ -253,3 +247,32 @@ def carrito_cantidad(request):
     """Vista AJAX para obtener cantidad de items en carrito"""
     carrito = obtener_o_crear_carrito(request.user)
     return JsonResponse({'cantidad': carrito.total_items})
+
+# Vistas legacy y de compatibilidad
+def buscar_camisetas(request):
+    """Vista de búsqueda de camisetas"""
+    resultados = []
+    query = ""
+    if request.method == "GET" and "equipo" in request.GET:
+        query = request.GET.get("equipo", "")
+        resultados = Camiseta.objects.filter(equipo__icontains=query, activa=True)
+    return render(request, 'mi_primer_app/buscar-camisetas.html', {"resultados": resultados, "query": query})
+
+def agregar_cliente(request):
+    """Vista para agregar cliente"""
+    mensaje = ""
+    if request.method == "POST":
+        nombre = request.POST.get("nombre")
+        apellido = request.POST.get("apellido")
+        email = request.POST.get("email", "")
+        telefono = request.POST.get("telefono", "")
+        if nombre and apellido and email:
+            Cliente.objects.create(nombre=nombre, apellido=apellido, email=email, telefono=telefono)
+            mensaje = f"Cliente {nombre} {apellido} agregado con éxito."
+        else:
+            mensaje = "Por favor complete todos los campos requeridos."
+    return render(request, 'mi_primer_app/agregar-cliente.html', {"mensaje": mensaje})
+
+def hola_mundo(request):
+    """Vista simple de prueba"""
+    return HttpResponse("¡Hola Mundo desde Django!")
