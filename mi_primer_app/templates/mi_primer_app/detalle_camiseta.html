@@ -1,0 +1,205 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}{{ camiseta.equipo }} {{ camiseta.temporada }} - Detalle{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <!-- Navegación breadcrumb -->
+        <div class="col-12 mb-3">
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'mi_primer_app:home' %}">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'mi_primer_app:camisetas' %}">Camisetas</a></li>
+                    <li class="breadcrumb-item active">{{ camiseta.equipo }}</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <div class="row">
+        <!-- Imagen del producto -->
+        <div class="col-lg-6 mb-4">
+            <div class="card">
+                {% if camiseta.imagen %}
+                    <img src="{{ camiseta.imagen }}" 
+                         alt="{{ camiseta.equipo }} {{ camiseta.temporada }}" 
+                         class="card-img-top product-image">
+                {% else %}
+                    <div class="card-img-top d-flex align-items-center justify-content-center bg-light product-image">
+                        <i class="fas fa-tshirt fa-5x text-muted"></i>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+
+        <!-- Información del producto -->
+        <div class="col-lg-6">
+            <div class="card h-100">
+                <div class="card-body">
+                    <!-- Título y badges -->
+                    <div class="d-flex justify-content-between align-items-start mb-3">
+                        <div>
+                            <h1 class="card-title text-primary">{{ camiseta.equipo }}</h1>
+                            <p class="text-muted lead">{{ camiseta.temporada }} - {{ camiseta.get_tipo_display }}</p>
+                        </div>
+                        {% if camiseta.tiene_oferta %}
+                        <span class="badge bg-danger fs-6">-{{ camiseta.descuento_porcentaje }}% OFF</span>
+                        {% endif %}
+                    </div>
+
+                    <!-- Información básica -->
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-tag text-primary"></i> Talla:</strong> {{ camiseta.talla }}</p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong><i class="fas fa-box text-primary"></i> Stock:</strong> 
+                                {% if camiseta.stock > 0 %}
+                                    <span class="text-success">{{ camiseta.stock }} disponibles</span>
+                                {% else %}
+                                    <span class="text-danger">Sin stock</span>
+                                {% endif %}
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Descripción -->
+                    {% if camiseta.descripcion %}
+                    <div class="mb-4">
+                        <h5><i class="fas fa-info-circle text-primary"></i> Descripción</h5>
+                        <p class="text-muted">{{ camiseta.descripcion }}</p>
+                    </div>
+                    {% endif %}
+
+                    <!-- Precios -->
+                    <div class="price-section mb-4 p-3 bg-light rounded">
+                        {% if camiseta.tiene_oferta %}
+                        <div class="d-flex align-items-center justify-content-between">
+                            <div>
+                                <span class="h3 text-success me-3">${{ camiseta.precio_oferta }}</span>
+                                <span class="h5 text-muted text-decoration-line-through">${{ camiseta.precio }}</span>
+                            </div>
+                            <span class="badge bg-success">¡Oferta!</span>
+                        </div>
+                        <small class="text-muted">Ahorras ${{ camiseta.precio|floatformat:0|add:camiseta.precio_oferta|floatformat:0 }}</small>
+                        {% else %}
+                        <div class="d-flex align-items-center justify-content-between">
+                            <span class="h3 text-primary">${{ camiseta.precio }}</span>
+                            <span class="badge bg-primary">Precio regular</span>
+                        </div>
+                        {% endif %}
+                    </div>
+
+                    <!-- Formulario de compra -->
+                    {% if user.is_authenticated %}
+                        {% if camiseta.stock > 0 %}
+                        <form method="post" action="{% url 'mi_primer_app:agregar_al_carrito' camiseta.id %}" class="mb-3">
+                            {% csrf_token %}
+                            <div class="row g-3 mb-3">
+                                <div class="col-md-4">
+                                    <label for="cantidad" class="form-label">Cantidad:</label>
+                                    <select name="cantidad" id="cantidad" class="form-select">
+                                        {% for i in "12345"|make_list %}
+                                            {% if i|add:0 <= camiseta.stock %}
+                                                <option value="{{ i }}">{{ i }}</option>
+                                            {% endif %}
+                                        {% endfor %}
+                                    </select>
+                                </div>
+                            </div>
+                            
+                            <div class="d-grid gap-2">
+                                <button type="submit" class="btn btn-success btn-lg">
+                                    <i class="fas fa-cart-plus"></i> Agregar al Carrito
+                                </button>
+                            </div>
+                        </form>
+                        {% else %}
+                        <div class="alert alert-warning">
+                            <i class="fas fa-exclamation-triangle"></i> 
+                            Este producto está temporalmente agotado
+                        </div>
+                        {% endif %}
+                    {% else %}
+                    <div class="alert alert-info">
+                        <i class="fas fa-info-circle"></i> 
+                        <a href="{% url 'login' %}" class="alert-link">Inicia sesión</a> 
+                        para agregar productos al carrito
+                    </div>
+                    {% endif %}
+
+                    <!-- Botones de acción adicionales -->
+                    <div class="row g-2">
+                        <div class="col-6">
+                            <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-secondary w-100">
+                                <i class="fas fa-arrow-left"></i> Volver al Catálogo
+                            </a>
+                        </div>
+                        {% if user.is_authenticated %}
+                        <div class="col-6">
+                            <a href="{% url 'mi_primer_app:ver_carrito' %}" class="btn btn-outline-primary w-100">
+                                <i class="fas fa-shopping-cart"></i> Ver Carrito
+                            </a>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información adicional -->
+    <div class="row mt-5">
+        <div class="col-12">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Información del Producto</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h6>Características:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-check text-success"></i> Réplica oficial de temporada</li>
+                                <li><i class="fas fa-check text-success"></i> Material de alta calidad</li>
+                                <li><i class="fas fa-check text-success"></i> Diseño retro auténtico</li>
+                                <li><i class="fas fa-check text-success"></i> Coleccionable</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h6>Envío y devoluciones:</h6>
+                            <ul class="list-unstyled">
+                                <li><i class="fas fa-truck text-primary"></i> Envío gratuito en órdenes superiores a $50</li>
+                                <li><i class="fas fa-undo text-primary"></i> 30 días para devoluciones</li>
+                                <li><i class="fas fa-shield-alt text-primary"></i> Garantía de calidad</li>
+                                <li><i class="fas fa-headset text-primary"></i> Soporte 24/7</li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.product-image {
+    height: 500px;
+    object-fit: cover;
+    border-radius: 10px;
+}
+
+.price-section {
+    border-left: 4px solid var(--bs-primary);
+}
+
+.card {
+    transition: transform 0.2s ease;
+}
+
+.btn:hover {
+    transform: translateY(-1px);
+}
+</style>
+{% endblock %}

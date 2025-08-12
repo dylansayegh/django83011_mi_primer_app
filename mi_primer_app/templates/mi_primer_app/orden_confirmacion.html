@@ -1,0 +1,205 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Confirmación de Orden{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <!-- Mensaje de éxito -->
+            <div class="text-center mb-5">
+                <div class="alert alert-success p-4">
+                    <i class="fas fa-check-circle fa-3x text-success mb-3"></i>
+                    <h2>¡Orden Confirmada!</h2>
+                    <p class="lead mb-0">Tu pedido ha sido procesado exitosamente</p>
+                </div>
+            </div>
+
+            <!-- Detalles de la orden -->
+            <div class="card mb-4">
+                <div class="card-header bg-primary text-white">
+                    <h4 class="mb-0">
+                        <i class="fas fa-receipt"></i> Detalles de la Orden
+                    </h4>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Número de Orden:</strong><br>
+                            <span class="h5 text-primary">{{ orden.numero_orden }}</span>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <strong>Fecha:</strong><br>
+                            {{ orden.fecha_creacion|date:"d/m/Y H:i" }}
+                        </div>
+                    </div>
+                    
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <strong>Estado:</strong><br>
+                            <span class="badge bg-warning text-dark">{{ orden.get_estado_display }}</span>
+                        </div>
+                        <div class="col-md-6 text-md-end">
+                            <strong>Total:</strong><br>
+                            <span class="h4 text-success">${{ orden.total|floatformat:2 }}</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos ordenados -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-list"></i> Productos Ordenados</h5>
+                </div>
+                <div class="card-body">
+                    {% for item in orden.items.all %}
+                    <div class="row align-items-center py-3 {% if not forloop.last %}border-bottom{% endif %}">
+                        <div class="col-md-6">
+                            <h6 class="mb-1">{{ item.camiseta_info.equipo }}</h6>
+                            <small class="text-muted">
+                                {{ item.camiseta_info.temporada }} - 
+                                {{ item.camiseta_info.tipo|title }} - 
+                                Talla {{ item.camiseta_info.talla }}
+                            </small>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            <span class="badge bg-secondary">{{ item.cantidad }}x</span>
+                        </div>
+                        <div class="col-md-2 text-center">
+                            ${{ item.precio_unitario|floatformat:2 }}
+                        </div>
+                        <div class="col-md-2 text-end">
+                            <strong>${{ item.subtotal|floatformat:2 }}</strong>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Información de envío -->
+            <div class="card mb-4">
+                <div class="card-header">
+                    <h5 class="mb-0"><i class="fas fa-shipping-fast"></i> Información de Envío</h5>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        <div class="col-md-8">
+                            <strong>Dirección:</strong><br>
+                            {{ orden.direccion_envio }}<br>
+                            {{ orden.ciudad }}, {{ orden.codigo_postal }}
+                        </div>
+                        <div class="col-md-4">
+                            <strong>Teléfono:</strong><br>
+                            {{ orden.telefono }}
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Próximos pasos -->
+            <div class="card mb-4">
+                <div class="card-header bg-info text-white">
+                    <h5 class="mb-0"><i class="fas fa-info-circle"></i> Próximos Pasos</h5>
+                </div>
+                <div class="card-body">
+                    <div class="timeline">
+                        <div class="timeline-item completed">
+                            <i class="fas fa-check-circle text-success"></i>
+                            <div class="timeline-content">
+                                <h6>Orden Recibida</h6>
+                                <small class="text-muted">{{ orden.fecha_creacion|date:"d/m/Y H:i" }}</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item pending">
+                            <i class="fas fa-credit-card text-warning"></i>
+                            <div class="timeline-content">
+                                <h6>Procesando Pago</h6>
+                                <small class="text-muted">Te contactaremos pronto</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item pending">
+                            <i class="fas fa-box text-muted"></i>
+                            <div class="timeline-content">
+                                <h6>Preparando Envío</h6>
+                                <small class="text-muted">1-2 días hábiles</small>
+                            </div>
+                        </div>
+                        <div class="timeline-item pending">
+                            <i class="fas fa-truck text-muted"></i>
+                            <div class="timeline-content">
+                                <h6>En Camino</h6>
+                                <small class="text-muted">3-5 días hábiles</small>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Acciones -->
+            <div class="text-center">
+                <a href="{% url 'mi_primer_app:mis_ordenes' %}" class="btn btn-primary me-3">
+                    <i class="fas fa-list"></i> Ver Mis Órdenes
+                </a>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-secondary me-3">
+                    <i class="fas fa-tshirt"></i> Seguir Comprando
+                </a>
+                <a href="{% url 'mi_primer_app:home' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-home"></i> Volver al Inicio
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.timeline {
+    position: relative;
+    padding-left: 3rem;
+}
+
+.timeline-item {
+    position: relative;
+    padding-bottom: 2rem;
+}
+
+.timeline-item:not(:last-child):before {
+    content: '';
+    position: absolute;
+    left: -2.5rem;
+    top: 2rem;
+    width: 2px;
+    height: calc(100% - 1rem);
+    background-color: #dee2e6;
+}
+
+.timeline-item.completed:not(:last-child):before {
+    background-color: #28a745;
+}
+
+.timeline-item i {
+    position: absolute;
+    left: -3rem;
+    top: 0;
+    width: 2rem;
+    height: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: white;
+    border: 2px solid #dee2e6;
+    border-radius: 50%;
+    font-size: 0.875rem;
+}
+
+.timeline-item.completed i {
+    border-color: #28a745;
+    background: #28a745;
+    color: white;
+}
+
+.timeline-content h6 {
+    margin-bottom: 0.25rem;
+}
+</style>
+{% endblock %}

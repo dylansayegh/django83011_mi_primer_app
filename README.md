@@ -1,12 +1,17 @@
-<<<<<<< HEAD
-# Mi tienda de camisetas retro - Proyecto Django
+pip install django
+# django83011_mi_primer_app
+
+Proyecto web en Django: blog y tienda de camisetas retro
 
 ## Descripción
-Este proyecto es una web de ejemplo desarrollada en Django, con herencia de plantillas, múltiples modelos y formularios para gestión de camisetas de fútbol retro, familiares y clientes. Incluye autenticación de usuarios, historial de compras y búsqueda en la base de datos.
-
-## Requisitos
-- Python 3.10+
-- Django 5.x
+Aplicación web desarrollada en Django 5.x con:
+- Herencia de plantillas y navegación moderna
+- CRUD de páginas/blog (app `pages`) con vistas basadas en clase (CBV)
+- Tienda de camisetas retro (app `mi_primer_app`)
+- Registro, login, logout y perfil de usuario (app `accounts`)
+- Página "Acerca de mí" y perfil personalizado
+- Integración de avatar generado por IA
+- Búsqueda y filtrado de camisetas
 
 ## Instalación y ejecución
 1. Clona el repositorio:
@@ -14,69 +19,42 @@ Este proyecto es una web de ejemplo desarrollada en Django, con herencia de plan
    git clone <URL_DE_TU_REPO>
    cd mi_primer_app
    ```
-2. Instala dependencias y crea la base de datos:
+2. Instala dependencias:
    ```
-   pip install django
+   pip install -r requirements.txt
+   ```
+3. Realiza migraciones:
+   ```
    python manage.py makemigrations
    python manage.py migrate
    ```
-3. Ejecuta el servidor:
+4. Ejecuta el servidor:
    ```
    python manage.py runserver
    ```
-4. Accede a la web en: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+5. Accede a la web en: [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ## Funcionalidades principales
-- **Herencia de plantillas:** Todas las páginas extienden de `padre.html`.
-- **Modelos:**
-  - `Camiseta`: camisetas de fútbol retro.
-  - `Familiar`: familiares del usuario.
-  - `Compra`: historial de compras de camisetas.
-  - (Extras: Curso, Estudiante, Auto)
-- **Formularios:**
-  - Agregar familiar: `/crear-familiar/`
-  - Agregar cliente: `/agregar-cliente/`
-  - Registrar usuario: `/registro/`
-  - Comprar camiseta: `/camisetas/` → botón "Comprar"
-- **Búsqueda:**
-  - Buscar camisetas por equipo: `/buscar-camisetas/`
-- **Autenticación:**
-  - Registro, login, logout, historial de compras (`/mis-compras/`)
-
-## Orden sugerido para probar
-1. Regístrate como usuario nuevo (`/registro/`).
-2. Inicia sesión (`/login/`).
-3. Agrega familiares y clientes.
-4. Ve a "Camisetas" y realiza una compra.
-5. Consulta tu historial en "Mis compras".
-6. Prueba la búsqueda de camisetas por equipo.
+- Home, About, perfil, login, registro, logout
+- CRUD de páginas/blog (crear, ver, editar, borrar)
+- Tienda de camisetas retro y compras
+- Historial de compras y búsqueda de camisetas
+- Avatar personalizado en perfil
+- Navegación clara y diseño responsive
 
 ## Estructura de carpetas relevante
-- `mi_primer_app/models.py`: modelos de la base de datos.
-- `mi_primer_app/views.py`: vistas y lógica de la web.
-- `mi_primer_app/templates/mi_primer_app/`: plantillas HTML.
-- `mi_primer_app/urls.py`: rutas de la aplicación.
+- `mi_primer_app/`: tienda y vistas principales
+- `pages/`: blog y páginas con CBV
+- `accounts/`: autenticación y perfil
+- `static/avatar/`: imagen de avatar personalizada
 
 ## Notas
-- Puedes modificar los modelos y vistas para agregar más funcionalidades.
-- El menú principal te permite navegar por todas las secciones.
-
-# Proyecto Django 83010
-Proyecto hecho en django, para ejecutar hace falta seguir estos comandos: 
-
-python manage.py makemigrations
-python manage.py migrate
-python manage.py runserver
-
-
-Es necesario tener instalado Django: 
-
-pip install django
+- No subas `db.sqlite3` ni la carpeta `media/` al repo (ya está en `.gitignore`)
+- Si agregas imágenes, colócalas en `static/`
+- Puedes personalizar el perfil y la página About a tu gusto
 
 ## Video
-link al video: https//:youbtube.com/video
+Agrega aquí el link a tu video de presentación
+
 ---
 ¡Listo para entregar y subir a GitHub!
-=======
-# django83011_mi_primer_app
->>>>>>> 82c9e2039e53aeb69da1dd577f6425c7a3142555

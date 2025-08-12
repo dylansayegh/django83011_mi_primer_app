@@ -1,0 +1,239 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Mi Carrito de Compras{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-shopping-cart text-primary"></i> Mi Carrito</h1>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> Seguir Comprando
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if items %}
+    <div class="row">
+        <!-- Items del carrito -->
+        <div class="col-lg-8">
+            {% for item in items %}
+            <div class="card mb-3 cart-item">
+                <div class="card-body">
+                    <div class="row g-3">
+                        <!-- Imagen del producto -->
+                        <div class="col-md-3">
+                            {% if item.camiseta.imagen %}
+                                <img src="{{ item.camiseta.imagen }}" 
+                                     alt="{{ item.camiseta.equipo }}" 
+                                     class="img-fluid rounded cart-item-image">
+                            {% else %}
+                                <div class="cart-item-image bg-light rounded d-flex align-items-center justify-content-center">
+                                    <i class="fas fa-tshirt fa-2x text-muted"></i>
+                                </div>
+                            {% endif %}
+                        </div>
+
+                        <!-- Información del producto -->
+                        <div class="col-md-6">
+                            <h5 class="card-title">
+                                <a href="{% url 'mi_primer_app:detalle_camiseta' item.camiseta.id %}" 
+                                   class="text-decoration-none">
+                                    {{ item.camiseta.equipo }}
+                                </a>
+                            </h5>
+                            <p class="text-muted mb-1">{{ item.camiseta.temporada }} - {{ item.camiseta.get_tipo_display }}</p>
+                            <p class="text-muted mb-1">Talla: {{ item.camiseta.talla }}</p>
+                            
+                            <!-- Precio unitario -->
+                            <div class="price-info">
+                                {% if item.camiseta.tiene_oferta %}
+                                <span class="text-success fw-bold">${{ item.camiseta.precio_oferta }}</span>
+                                <span class="text-muted text-decoration-line-through ms-2">${{ item.camiseta.precio }}</span>
+                                {% else %}
+                                <span class="text-primary fw-bold">${{ item.camiseta.precio }}</span>
+                                {% endif %}
+                            </div>
+
+                            <!-- Stock disponible -->
+                            <small class="text-muted">
+                                <i class="fas fa-box"></i> Stock: {{ item.camiseta.stock }} disponibles
+                            </small>
+                        </div>
+
+                        <!-- Controles de cantidad y precio -->
+                        <div class="col-md-3">
+                            <div class="text-end">
+                                <!-- Controles de cantidad -->
+                                <form method="post" action="{% url 'mi_primer_app:actualizar_carrito' item.id %}" class="mb-3">
+                                    {% csrf_token %}
+                                    <div class="input-group input-group-sm">
+                                        <select name="cantidad" class="form-select" onchange="this.form.submit()">
+                                            {% for i in "12345678910"|make_list %}
+                                                {% if i|add:0 <= item.camiseta.stock %}
+                                                    <option value="{{ i }}" {% if i|add:0 == item.cantidad %}selected{% endif %}>
+                                                        {{ i }}
+                                                    </option>
+                                                {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                        <button class="btn btn-outline-secondary" type="submit">
+                                            <i class="fas fa-sync-alt"></i>
+                                        </button>
+                                    </div>
+                                </form>
+
+                                <!-- Subtotal -->
+                                <div class="mb-2">
+                                    <strong class="text-success">${{ item.subtotal|floatformat:2 }}</strong>
+                                </div>
+
+                                <!-- Botón eliminar -->
+                                <form method="post" action="{% url 'mi_primer_app:eliminar_del_carrito' item.id %}" class="d-inline">
+                                    {% csrf_token %}
+                                    <button type="submit" class="btn btn-outline-danger btn-sm" 
+                                            onclick="return confirm('¿Eliminar este producto del carrito?')">
+                                        <i class="fas fa-trash"></i> Eliminar
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+
+        <!-- Resumen del carrito -->
+        <div class="col-lg-4">
+            <div class="card sticky-top">
+                <div class="card-header bg-primary text-white">
+                    <h5 class="mb-0"><i class="fas fa-calculator"></i> Resumen del Pedido</h5>
+                </div>
+                <div class="card-body">
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Productos ({{ total_items }}):</span>
+                        <span>${{ total_precio|floatformat:2 }}</span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2">
+                        <span>Envío:</span>
+                        <span class="text-success">
+                            {% if total_precio >= 50 %}
+                                GRATIS
+                            {% else %}
+                                $5.00
+                            {% endif %}
+                        </span>
+                    </div>
+                    {% if total_precio < 50 %}
+                    <small class="text-muted d-block mb-3">
+                        <i class="fas fa-truck"></i> Envío gratis en compras superiores a $50
+                    </small>
+                    {% endif %}
+                    
+                    <hr>
+                    
+                    <div class="d-flex justify-content-between mb-3">
+                        <strong>Total:</strong>
+                        <strong class="text-success">
+                            ${% if total_precio >= 50 %}{{ total_precio|floatformat:2 }}{% else %}{{ total_precio|add:5|floatformat:2 }}{% endif %}
+                        </strong>
+                    </div>
+
+                    <div class="d-grid">
+                        <a href="{% url 'mi_primer_app:checkout' %}" class="btn btn-success btn-lg">
+                            <i class="fas fa-credit-card"></i> Proceder al Pago
+                        </a>
+                    </div>
+
+                    <div class="text-center mt-3">
+                        <small class="text-muted">
+                            <i class="fas fa-lock"></i> Compra 100% segura
+                        </small>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Productos recomendados o promociones -->
+            <div class="card mt-3">
+                <div class="card-header">
+                    <h6 class="mb-0"><i class="fas fa-star text-warning"></i> ¿Sabías que...?</h6>
+                </div>
+                <div class="card-body">
+                    <ul class="list-unstyled mb-0">
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Todas nuestras camisetas son réplicas oficiales</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> Envío gratuito en compras superiores a $50</li>
+                        <li class="mb-2"><i class="fas fa-check text-success"></i> 30 días para devoluciones</li>
+                        <li><i class="fas fa-check text-success"></i> Soporte 24/7</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    {% else %}
+    <!-- Carrito vacío -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">Tu carrito está vacío</h3>
+                <p class="text-muted mb-4">¡Descubre nuestra increíble colección de camisetas retro!</p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary btn-lg w-100 mb-2">
+                            <i class="fas fa-tshirt"></i> Explorar Camisetas
+                        </a>
+                        <a href="{% url 'mi_primer_app:home' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-home"></i> Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.cart-item {
+    transition: box-shadow 0.3s ease;
+}
+
+.cart-item:hover {
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+}
+
+.cart-item-image {
+    height: 120px;
+    width: 100%;
+    object-fit: cover;
+}
+
+.sticky-top {
+    top: 100px;
+}
+
+.price-info {
+    font-size: 1.1em;
+}
+
+@media (max-width: 768px) {
+    .sticky-top {
+        position: relative !important;
+        top: auto !important;
+    }
+}
+</style>
+
+<!-- JavaScript para actualización automática -->
+<script>
+// Actualizar contador del carrito en la navegación (si existe)
+document.addEventListener('DOMContentLoaded', function() {
+    // Puedes agregar lógica adicional aquí para actualizar contadores
+});
+</script>
+{% endblock %}

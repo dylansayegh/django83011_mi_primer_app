@@ -1,20 +1,36 @@
 from django.urls import path, include
 from . import views
 
+app_name = 'mi_primer_app'
+
 urlpatterns = [
-    path('', views.pagina_inicio, name='inicio'),
+    path('', views.pagina_inicio, name='home'),
     path('camisetas/', views.pagina_camisetas, name='camisetas'),
-    path('login/', views.pagina_login, name='login'),
-    path('logout/', views.pagina_logout, name='logout'),
+    path('camiseta/<int:camiseta_id>/', views.detalle_camiseta, name='detalle_camiseta'),
+    
+    # Carrito de compras
+    path('carrito/', views.ver_carrito, name='ver_carrito'),
+    path('carrito/agregar/<int:camiseta_id>/', views.agregar_al_carrito, name='agregar_al_carrito'),
+    path('carrito/actualizar/<int:item_id>/', views.actualizar_carrito, name='actualizar_carrito'),
+    path('carrito/eliminar/<int:item_id>/', views.eliminar_del_carrito, name='eliminar_del_carrito'),
+    path('carrito/cantidad/', views.carrito_cantidad, name='carrito_cantidad'),
+    
+    # Checkout y órdenes
+    path('checkout/', views.checkout, name='checkout'),
+    path('orden/<int:orden_id>/confirmacion/', views.orden_confirmacion, name='orden_confirmacion'),
+    path('mis-ordenes/', views.mis_ordenes, name='mis_ordenes'),
+    
+    # Rutas legacy mantenidas para compatibilidad
+    path('login/', views.pagina_login, name='login_legacy'),
+    path('logout/', views.pagina_logout, name='logout_legacy'),
     path('registro/', views.pagina_registro, name='registro'),
-    path('mis-compras/', views.pagina_mis_compras, name='mis-compras'),
-    path('buscar-camisetas/', views.pagina_buscar_camisetas, name='buscar-camisetas'),
+    path('mis-compras/', views.mis_compras, name='mis-compras'),
+    path('buscar-camisetas/', views.buscar_camisetas, name='buscar-camisetas'),
+    
     # Rutas originales para funcionalidad completa
     path('hola-mundo/', views.hola_mundo, name='hola-mundo'),
     path('agregar-cliente/', views.agregar_cliente, name='agregar-cliente'),
     path('comprar-camiseta/<int:camiseta_id>/', views.comprar_camiseta, name='comprar-camiseta'),
-    path('pages/', include('pages.urls')),
-    path('accounts/', include('accounts.urls')),
 ]
 
 

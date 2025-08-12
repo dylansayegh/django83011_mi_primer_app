@@ -1,0 +1,235 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Finalizar Compra - Checkout{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12 mb-4">
+            <h1><i class="fas fa-credit-card text-primary"></i> Finalizar Compra</h1>
+            <nav aria-label="breadcrumb">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="{% url 'mi_primer_app:home' %}">Inicio</a></li>
+                    <li class="breadcrumb-item"><a href="{% url 'mi_primer_app:ver_carrito' %}">Carrito</a></li>
+                    <li class="breadcrumb-item active">Checkout</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+    <form method="post" id="checkoutForm">
+        {% csrf_token %}
+        <div class="row">
+            <!-- Formulario de datos -->
+            <div class="col-lg-8">
+                <!-- Información de envío -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-shipping-fast"></i> Información de Envío</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label for="direccion" class="form-label">Dirección completa *</label>
+                                <textarea class="form-control" id="direccion" name="direccion" rows="3" 
+                                          placeholder="Calle, número, piso, departamento..." required></textarea>
+                            </div>
+                            <div class="col-md-8">
+                                <label for="ciudad" class="form-label">Ciudad *</label>
+                                <input type="text" class="form-control" id="ciudad" name="ciudad" 
+                                       placeholder="Ej: Buenos Aires" required>
+                            </div>
+                            <div class="col-md-4">
+                                <label for="codigo_postal" class="form-label">Código Postal *</label>
+                                <input type="text" class="form-control" id="codigo_postal" name="codigo_postal" 
+                                       placeholder="Ej: 1425" required>
+                            </div>
+                            <div class="col-12">
+                                <label for="telefono" class="form-label">Teléfono de contacto *</label>
+                                <input type="tel" class="form-control" id="telefono" name="telefono" 
+                                       placeholder="Ej: +54 11 1234-5678" required>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Método de pago -->
+                <div class="card mb-4">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-credit-card"></i> Método de Pago</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="metodo_pago" 
+                                           id="tarjeta_credito" value="tarjeta_credito" checked>
+                                    <label class="form-check-label" for="tarjeta_credito">
+                                        <i class="fab fa-cc-visa text-primary"></i>
+                                        <i class="fab fa-cc-mastercard text-warning"></i>
+                                        Tarjeta de Crédito
+                                    </label>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-check mb-3">
+                                    <input class="form-check-input" type="radio" name="metodo_pago" 
+                                           id="transferencia" value="transferencia">
+                                    <label class="form-check-label" for="transferencia">
+                                        <i class="fas fa-university text-success"></i>
+                                        Transferencia Bancaria
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Información adicional de pago -->
+                        <div class="alert alert-info">
+                            <i class="fas fa-info-circle"></i>
+                            <strong>Información importante:</strong> 
+                            Esta es una demo. No se procesarán pagos reales. 
+                            Al finalizar la compra se creará la orden pendiente de pago.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Resumen del pedido -->
+            <div class="col-lg-4">
+                <div class="card sticky-top">
+                    <div class="card-header bg-success text-white">
+                        <h5 class="mb-0"><i class="fas fa-receipt"></i> Resumen del Pedido</h5>
+                    </div>
+                    <div class="card-body">
+                        <!-- Items del pedido -->
+                        {% for item in items %}
+                        <div class="d-flex justify-content-between align-items-center mb-3 pb-3 border-bottom">
+                            <div class="flex-grow-1">
+                                <h6 class="mb-1">{{ item.camiseta.equipo }}</h6>
+                                <small class="text-muted">
+                                    {{ item.camiseta.temporada }} - {{ item.camiseta.talla }}
+                                    <br>Cantidad: {{ item.cantidad }}
+                                </small>
+                            </div>
+                            <div class="text-end">
+                                <span class="fw-bold">${{ item.subtotal|floatformat:2 }}</span>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                        <!-- Cálculos -->
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal:</span>
+                            <span>${{ total_precio|floatformat:2 }}</span>
+                        </div>
+                        
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Envío:</span>
+                            <span class="text-success">
+                                {% if total_precio >= 50 %}
+                                    GRATIS
+                                {% else %}
+                                    $5.00
+                                {% endif %}
+                            </span>
+                        </div>
+
+                        {% if total_precio < 50 %}
+                        <small class="text-muted d-block mb-3">
+                            <i class="fas fa-info-circle"></i> 
+                            Envío gratuito en compras superiores a $50
+                        </small>
+                        {% endif %}
+
+                        <hr>
+
+                        <div class="d-flex justify-content-between mb-4">
+                            <strong>Total:</strong>
+                            <strong class="text-success h5">
+                                ${% if total_precio >= 50 %}{{ total_precio|floatformat:2 }}{% else %}{{ total_precio|add:5|floatformat:2 }}{% endif %}
+                            </strong>
+                        </div>
+
+                        <!-- Botón de finalizar compra -->
+                        <div class="d-grid gap-2">
+                            <button type="submit" class="btn btn-success btn-lg" id="finalizarBtn">
+                                <i class="fas fa-lock"></i> Finalizar Compra
+                            </button>
+                            <a href="{% url 'mi_primer_app:ver_carrito' %}" class="btn btn-outline-secondary">
+                                <i class="fas fa-arrow-left"></i> Volver al Carrito
+                            </a>
+                        </div>
+
+                        <!-- Garantías -->
+                        <div class="mt-4">
+                            <small class="text-muted">
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-shield-alt text-success me-2"></i>
+                                    Compra 100% segura
+                                </div>
+                                <div class="d-flex align-items-center mb-2">
+                                    <i class="fas fa-undo text-primary me-2"></i>
+                                    30 días para devoluciones
+                                </div>
+                                <div class="d-flex align-items-center">
+                                    <i class="fas fa-headset text-info me-2"></i>
+                                    Soporte 24/7
+                                </div>
+                            </small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>
+
+<style>
+.sticky-top {
+    top: 100px;
+}
+
+.form-check-input:checked {
+    background-color: var(--bs-success);
+    border-color: var(--bs-success);
+}
+
+.card {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+}
+
+@media (max-width: 768px) {
+    .sticky-top {
+        position: relative !important;
+        top: auto !important;
+    }
+}
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    const form = document.getElementById('checkoutForm');
+    const finalizarBtn = document.getElementById('finalizarBtn');
+    
+    form.addEventListener('submit', function(e) {
+        // Mostrar estado de carga
+        finalizarBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Procesando...';
+        finalizarBtn.disabled = true;
+        
+        // Validación adicional si es necesaria
+        const direccion = document.getElementById('direccion').value.trim();
+        const ciudad = document.getElementById('ciudad').value.trim();
+        const codigoPostal = document.getElementById('codigo_postal').value.trim();
+        const telefono = document.getElementById('telefono').value.trim();
+        
+        if (!direccion || !ciudad || !codigoPostal || !telefono) {
+            e.preventDefault();
+            alert('Por favor, completa todos los campos obligatorios.');
+            finalizarBtn.innerHTML = '<i class="fas fa-lock"></i> Finalizar Compra';
+            finalizarBtn.disabled = false;
+            return;
+        }
+    });
+});
+</script>
+{% endblock %}

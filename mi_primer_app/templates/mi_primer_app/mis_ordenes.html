@@ -1,0 +1,200 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Mis Órdenes{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-shopping-bag text-primary"></i> Mis Órdenes</h1>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Nueva Compra
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if ordenes %}
+    <div class="row">
+        {% for orden in ordenes %}
+        <div class="col-lg-6 mb-4">
+            <div class="card h-100 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt text-primary"></i> 
+                        {{ orden.numero_orden }}
+                    </h5>
+                    <span class="badge {% if orden.estado == 'pendiente' %}bg-warning text-dark{% elif orden.estado == 'pagada' %}bg-info{% elif orden.estado == 'enviada' %}bg-primary{% elif orden.estado == 'entregada' %}bg-success{% else %}bg-danger{% endif %}">
+                        {{ orden.get_estado_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <!-- Información básica -->
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <small class="text-muted">Fecha:</small><br>
+                            <strong>{{ orden.fecha_creacion|date:"d/m/Y" }}</strong>
+                        </div>
+                        <div class="col-6 text-end">
+                            <small class="text-muted">Total:</small><br>
+                            <strong class="text-success h5">${{ orden.total|floatformat:2 }}</strong>
+                        </div>
+                    </div>
+
+                    <!-- Productos -->
+                    <div class="mb-3">
+                        <small class="text-muted">Productos:</small>
+                        <div class="mt-1">
+                            {% for item in orden.items.all|slice:":3" %}
+                            <div class="d-flex justify-content-between align-items-center mb-1">
+                                <span class="small">
+                                    {{ item.cantidad }}x {{ item.camiseta_info.equipo }}
+                                    {% if item.camiseta_info.temporada %}({{ item.camiseta_info.temporada }}){% endif %}
+                                </span>
+                                <span class="small text-muted">${{ item.subtotal|floatformat:2 }}</span>
+                            </div>
+                            {% endfor %}
+                            {% if orden.items.count > 3 %}
+                            <small class="text-muted">y {{ orden.items.count|add:"-3" }} producto{% if orden.items.count > 4 %}s{% endif %} más...</small>
+                            {% endif %}
+                        </div>
+                    </div>
+
+                    <!-- Dirección de envío -->
+                    <div class="mb-3">
+                        <small class="text-muted">Envío a:</small><br>
+                        <small>{{ orden.ciudad }}, {{ orden.codigo_postal }}</small>
+                    </div>
+
+                    <!-- Progress bar según estado -->
+                    <div class="mb-3">
+                        <small class="text-muted">Progreso:</small>
+                        <div class="progress mt-1" style="height: 6px;">
+                            {% if orden.estado == 'pendiente' %}
+                            <div class="progress-bar bg-warning" style="width: 25%"></div>
+                            {% elif orden.estado == 'pagada' %}
+                            <div class="progress-bar bg-info" style="width: 50%"></div>
+                            {% elif orden.estado == 'enviada' %}
+                            <div class="progress-bar bg-primary" style="width: 75%"></div>
+                            {% elif orden.estado == 'entregada' %}
+                            <div class="progress-bar bg-success" style="width: 100%"></div>
+                            {% else %}
+                            <div class="progress-bar bg-danger" style="width: 0%"></div>
+                            {% endif %}
+                        </div>
+                    </div>
+                </div>
+                <div class="card-footer bg-transparent">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <small class="text-muted">
+                            <i class="fas fa-clock"></i> 
+                            {{ orden.fecha_actualizacion|timesince }} ago
+                        </small>
+                        <a href="{% url 'mi_primer_app:orden_confirmacion' orden.id %}" 
+                           class="btn btn-outline-primary btn-sm">
+                            <i class="fas fa-eye"></i> Ver Detalles
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+
+    <!-- Paginación si hay muchas órdenes -->
+    {% if ordenes.count > 6 %}
+    <div class="row">
+        <div class="col-12">
+            <nav aria-label="Navegación de órdenes">
+                <p class="text-muted text-center">
+                    Mostrando las últimas {{ ordenes.count }} órdenes
+                </p>
+            </nav>
+        </div>
+    </div>
+    {% endif %}
+
+    {% else %}
+    <!-- No hay órdenes -->
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-bag fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted mb-3">No tienes órdenes aún</h3>
+                <p class="text-muted mb-4">¡Descubre nuestra increíble colección de camisetas retro!</p>
+                
+                <div class="row justify-content-center">
+                    <div class="col-md-6">
+                        <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary btn-lg w-100 mb-2">
+                            <i class="fas fa-tshirt"></i> Explorar Camisetas
+                        </a>
+                        <a href="{% url 'mi_primer_app:home' %}" class="btn btn-outline-secondary w-100">
+                            <i class="fas fa-home"></i> Volver al Inicio
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<!-- Información adicional -->
+<div class="container mt-5">
+    <div class="row">
+        <div class="col-12">
+            <div class="card bg-light">
+                <div class="card-body">
+                    <div class="row text-center">
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <i class="fas fa-truck fa-2x text-primary mb-2"></i>
+                            <h6>Envío Rápido</h6>
+                            <small class="text-muted">3-5 días hábiles</small>
+                        </div>
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <i class="fas fa-undo fa-2x text-success mb-2"></i>
+                            <h6>Devoluciones</h6>
+                            <small class="text-muted">30 días para cambios</small>
+                        </div>
+                        <div class="col-md-3 mb-3 mb-md-0">
+                            <i class="fas fa-shield-alt fa-2x text-info mb-2"></i>
+                            <h6>Compra Segura</h6>
+                            <small class="text-muted">Protección garantizada</small>
+                        </div>
+                        <div class="col-md-3">
+                            <i class="fas fa-headset fa-2x text-warning mb-2"></i>
+                            <h6>Soporte 24/7</h6>
+                            <small class="text-muted">Ayuda cuando lo necesites</small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+.card {
+    transition: transform 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.progress {
+    border-radius: 10px;
+}
+
+.badge {
+    font-size: 0.75em;
+}
+
+@media (max-width: 768px) {
+    .card-body {
+        padding: 1rem 0.75rem;
+    }
+}
+</style>
+{% endblock %}
