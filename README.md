@@ -47,38 +47,34 @@
 ### 👤 Panel de Usuario
 ![Perfil](https://via.placeholder.com/800x400/6f42c1/ffffff?text=PERFIL+DE+USUARIO)
 
-## 🚀 Instalación Rápida
+## 🚀 Instalación y Configuración
 
-### 1️⃣ **Clona el repositorio**
+### 🔧 **Requisitos Previos**
+- Python 3.10+
+- Git (opcional)
+
+### ⚙️ **Configuración del Proyecto**
+### 1️⃣ **Instala las dependencias necesarias**
 ```bash
-git clone https://github.com/dylansayegh/django83011_mi_primer_app.git
-cd django83011_mi_primer_app
+pip install django==5.2.4
+pip install pillow==10.0.0
+pip install python-decouple==3.8
 ```
 
-### 2️⃣ **Instala dependencias**
-```bash
-pip install -r requirements.txt
-```
-
-### 3️⃣ **Configura la base de datos**
+### 2️⃣ **Configura la base de datos**
 ```bash
 python manage.py makemigrations
 python manage.py migrate
 ```
 
-### 4️⃣ **Crea un superusuario (opcional)**
-```bash
-python manage.py createsuperuser
-```
-
-### 5️⃣ **Ejecuta el servidor**
+### 3️⃣ **Inicia el servidor de desarrollo**
 ```bash
 python manage.py runserver
 ```
 
-### 6️⃣ **¡Accede a tu tienda!**
-- 🌐 **Web:** http://127.0.0.1:8000/
-- 🔧 **Admin:** http://127.0.0.1:8000/admin/
+### 4️⃣ **¡Accede a tu tienda!**
+- 🌐 **Aplicación:** http://127.0.0.1:8000/
+- 🔧 **Panel Admin:** http://127.0.0.1:8000/admin/ (crear superusuario si es necesario)
 
 ## 🛠️ Stack Tecnológico
 
