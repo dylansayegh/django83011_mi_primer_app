@@ -8,34 +8,67 @@
     
     <div class="row">
         <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
+            <div class="card h-100">
+                <img src="https://via.placeholder.com/300x200?text=Barcelona+1992" class="card-img-top" alt="Barcelona 1992">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Barcelona 1992</h5>
-                    <p class="card-text">Talla: M</p>
-                    <p class="h5 text-success">$69.99</p>
-                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                    <p class="card-text">Talla: M • Stock: 5 disponibles</p>
+                    <p class="card-text text-muted">Camiseta oficial del FC Barcelona temporada 1992. Incluye escudo bordado y número opcional.</p>
+                    <div class="mt-auto">
+                        <p class="h5 text-success mb-3">$69.99</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="agregarAlCarrito('Barcelona 1992', 69.99)">
+                                <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="verDetalle('Barcelona 1992')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
+            <div class="card h-100">
+                <img src="https://via.placeholder.com/300x200?text=Real+Madrid+1998" class="card-img-top" alt="Real Madrid 1998">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Real Madrid 1998</h5>
-                    <p class="card-text">Talla: L</p>
-                    <p class="h5 text-primary">$79.99</p>
-                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                    <p class="card-text">Talla: L • Stock: 3 disponibles</p>
+                    <p class="card-text text-muted">Camiseta histórica del Real Madrid temporada 1998. Champions League edition con detalles dorados.</p>
+                    <div class="mt-auto">
+                        <p class="h5 text-primary mb-3">$79.99</p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="agregarAlCarrito('Real Madrid 1998', 79.99)">
+                                <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="verDetalle('Real Madrid 1998')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
         
         <div class="col-md-4 mb-3">
-            <div class="card">
-                <div class="card-body">
+            <div class="card h-100">
+                <img src="https://via.placeholder.com/300x200?text=Argentina+1986" class="card-img-top" alt="Argentina 1986">
+                <div class="card-body d-flex flex-column">
                     <h5 class="card-title">Argentina 1986</h5>
-                    <p class="card-text">Talla: M</p>
-                    <p class="h5 text-primary">$129.99</p>
-                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                    <p class="card-text">Talla: M • Stock: 2 disponibles</p>
+                    <p class="card-text text-muted">Camiseta legendaria de Argentina Mundial 1986. La camiseta de Maradona con autenticidad garantizada.</p>
+                    <div class="mt-auto">
+                        <p class="h5 text-warning mb-3">$129.99 <small class="text-muted">¡EDICIÓN LIMITADA!</small></p>
+                        <div class="d-grid gap-2">
+                            <button class="btn btn-success" onclick="agregarAlCarrito('Argentina 1986', 129.99)">
+                                <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                            </button>
+                            <button class="btn btn-outline-primary" onclick="verDetalle('Argentina 1986')">
+                                <i class="fas fa-eye"></i> Ver Detalles
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -43,7 +76,310 @@
     
     <div class="text-center mt-4">
         <p class="lead">¡Las mejores camisetas retro están aquí!</p>
+        <div class="alert alert-info d-none" id="carritoMensaje" role="alert">
+            <strong>¡Producto agregado!</strong> <span id="productoAgregado"></span> se ha agregado a tu carrito.
+        </div>
         <a href="{% url 'mi_primer_app:home' %}" class="btn btn-secondary">← Volver al Inicio</a>
+        <button class="btn btn-warning ms-2" onclick="verCarrito()">
+            <i class="fas fa-shopping-cart"></i> Ver Carrito (<span id="contadorCarrito">0</span>)
+        </button>
     </div>
 </div>
+
+<!-- Modal de Detalles -->
+<div class="modal fade" id="detalleModal" tabindex="-1" aria-labelledby="detalleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="detalleModalLabel">Detalles de la Camiseta</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="detalleContenido">
+                <!-- Contenido se carga dinámicamente -->
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-success" id="btnAgregarDesdeDetalle">
+                    <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal del Carrito -->
+<div class="modal fade" id="carritoModal" tabindex="-1" aria-labelledby="carritoModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-xl">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="carritoModalLabel">
+                    <i class="fas fa-shopping-cart"></i> Tu Carrito de Compras
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" id="carritoContenido">
+                <div class="text-center">
+                    <p class="lead text-muted">Tu carrito está vacío</p>
+                    <i class="fas fa-shopping-cart fa-3x text-muted"></i>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Seguir Comprando</button>
+                <button type="button" class="btn btn-success" id="btnProcesarCompra" style="display: none;">
+                    <i class="fas fa-credit-card"></i> Procesar Compra
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+// Carrito de compras en localStorage
+let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+
+// Actualizar contador al cargar la página
+document.addEventListener('DOMContentLoaded', function() {
+    actualizarContadorCarrito();
+});
+
+function agregarAlCarrito(nombre, precio) {
+    // Buscar si el producto ya existe
+    const productoExistente = carrito.find(item => item.nombre === nombre);
+    
+    if (productoExistente) {
+        productoExistente.cantidad += 1;
+    } else {
+        carrito.push({
+            nombre: nombre,
+            precio: precio,
+            cantidad: 1,
+            id: Date.now() // ID único
+        });
+    }
+    
+    // Guardar en localStorage
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    
+    // Mostrar mensaje de confirmación
+    mostrarMensajeAgregado(nombre);
+    
+    // Actualizar contador
+    actualizarContadorCarrito();
+}
+
+function mostrarMensajeAgregado(producto) {
+    const mensaje = document.getElementById('carritoMensaje');
+    const productoSpan = document.getElementById('productoAgregado');
+    
+    productoSpan.textContent = producto;
+    mensaje.classList.remove('d-none');
+    
+    // Ocultar después de 3 segundos
+    setTimeout(() => {
+        mensaje.classList.add('d-none');
+    }, 3000);
+}
+
+function actualizarContadorCarrito() {
+    const contador = carrito.reduce((total, item) => total + item.cantidad, 0);
+    document.getElementById('contadorCarrito').textContent = contador;
+}
+
+function verDetalle(nombre) {
+    const detalles = {
+        'Barcelona 1992': {
+            imagen: 'https://via.placeholder.com/400x300?text=Barcelona+1992',
+            descripcion: 'Camiseta oficial del FC Barcelona temporada 1992-1993. Esta icónica camiseta azulgrana representa una de las épocas más gloriosas del club catalán.',
+            caracteristicas: [
+                'Material: 100% Poliéster transpirable',
+                'Escudo bordado oficial del FC Barcelona',
+                'Números y nombres personalizables',
+                'Corte clásico años 90',
+                'Cuello redondo reforzado'
+            ],
+            precio: 69.99,
+            talla: 'M',
+            stock: 5
+        },
+        'Real Madrid 1998': {
+            imagen: 'https://via.placeholder.com/400x300?text=Real+Madrid+1998',
+            descripcion: 'Camiseta histórica del Real Madrid temporada 1998-1999, Champions League Edition. La camiseta de la séptima Copa de Europa con detalles dorados únicos.',
+            caracteristicas: [
+                'Material: Mezcla algodón-poliéster premium',
+                'Detalles dorados Champions League',
+                'Escudo bordado en alta calidad',
+                'Edición limitada coleccionista',
+                'Tecnología anti-humedad'
+            ],
+            precio: 79.99,
+            talla: 'L',
+            stock: 3
+        },
+        'Argentina 1986': {
+            imagen: 'https://via.placeholder.com/400x300?text=Argentina+1986',
+            descripcion: 'Camiseta legendaria de la Selección Argentina Mundial México 1986. La camiseta con la que Maradona conquistó el mundo y escribió la historia del fútbol.',
+            caracteristicas: [
+                'Réplica oficial FIFA World Cup 1986',
+                'Material vintage de época',
+                'Escudo AFA bordado a mano',
+                'Certificado de autenticidad incluido',
+                'Edición numerada limitada'
+            ],
+            precio: 129.99,
+            talla: 'M',
+            stock: 2
+        }
+    };
+    
+    const detalle = detalles[nombre];
+    if (!detalle) return;
+    
+    const contenido = `
+        <div class="row">
+            <div class="col-md-6">
+                <img src="${detalle.imagen}" class="img-fluid rounded" alt="${nombre}">
+            </div>
+            <div class="col-md-6">
+                <h4>${nombre}</h4>
+                <p class="text-muted">${detalle.descripcion}</p>
+                
+                <h6>Características:</h6>
+                <ul class="list-unstyled">
+                    ${detalle.caracteristicas.map(car => `<li><i class="fas fa-check text-success"></i> ${car}</li>`).join('')}
+                </ul>
+                
+                <div class="row mt-3">
+                    <div class="col-sm-6">
+                        <strong>Precio:</strong> <span class="text-success h5">$${detalle.precio}</span>
+                    </div>
+                    <div class="col-sm-3">
+                        <strong>Talla:</strong> ${detalle.talla}
+                    </div>
+                    <div class="col-sm-3">
+                        <strong>Stock:</strong> ${detalle.stock}
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    document.getElementById('detalleContenido').innerHTML = contenido;
+    
+    // Configurar botón de agregar al carrito en el modal
+    const btnAgregar = document.getElementById('btnAgregarDesdeDetalle');
+    btnAgregar.onclick = () => {
+        agregarAlCarrito(nombre, detalle.precio);
+        // Cerrar modal
+        const modal = bootstrap.Modal.getInstance(document.getElementById('detalleModal'));
+        modal.hide();
+    };
+    
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById('detalleModal'));
+    modal.show();
+}
+
+function verCarrito() {
+    if (carrito.length === 0) {
+        document.getElementById('carritoContenido').innerHTML = `
+            <div class="text-center">
+                <p class="lead text-muted">Tu carrito está vacío</p>
+                <i class="fas fa-shopping-cart fa-3x text-muted"></i>
+                <p class="mt-3">¡Agrega algunas camisetas retro increíbles!</p>
+            </div>
+        `;
+        document.getElementById('btnProcesarCompra').style.display = 'none';
+    } else {
+        let total = 0;
+        const contenido = `
+            <div class="table-responsive">
+                <table class="table table-hover">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>Producto</th>
+                            <th>Precio</th>
+                            <th>Cantidad</th>
+                            <th>Subtotal</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        ${carrito.map(item => {
+                            const subtotal = item.precio * item.cantidad;
+                            total += subtotal;
+                            return `
+                                <tr>
+                                    <td><strong>${item.nombre}</strong></td>
+                                    <td>$${item.precio.toFixed(2)}</td>
+                                    <td>
+                                        <div class="input-group input-group-sm" style="width: 120px;">
+                                            <button class="btn btn-outline-secondary" onclick="cambiarCantidad(${item.id}, -1)">-</button>
+                                            <input type="text" class="form-control text-center" value="${item.cantidad}" readonly>
+                                            <button class="btn btn-outline-secondary" onclick="cambiarCantidad(${item.id}, 1)">+</button>
+                                        </div>
+                                    </td>
+                                    <td><strong>$${subtotal.toFixed(2)}</strong></td>
+                                    <td>
+                                        <button class="btn btn-sm btn-danger" onclick="eliminarDelCarrito(${item.id})">
+                                            <i class="fas fa-trash"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            `;
+                        }).join('')}
+                    </tbody>
+                    <tfoot class="table-secondary">
+                        <tr>
+                            <th colspan="3">TOTAL</th>
+                            <th>$${total.toFixed(2)}</th>
+                            <th></th>
+                        </tr>
+                    </tfoot>
+                </table>
+            </div>
+        `;
+        
+        document.getElementById('carritoContenido').innerHTML = contenido;
+        document.getElementById('btnProcesarCompra').style.display = 'inline-block';
+    }
+    
+    // Mostrar modal
+    const modal = new bootstrap.Modal(document.getElementById('carritoModal'));
+    modal.show();
+}
+
+function cambiarCantidad(id, cambio) {
+    const item = carrito.find(producto => producto.id === id);
+    if (item) {
+        item.cantidad += cambio;
+        if (item.cantidad <= 0) {
+            eliminarDelCarrito(id);
+            return;
+        }
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        actualizarContadorCarrito();
+        verCarrito(); // Refrescar el modal
+    }
+}
+
+function eliminarDelCarrito(id) {
+    carrito = carrito.filter(item => item.id !== id);
+    localStorage.setItem('carrito', JSON.stringify(carrito));
+    actualizarContadorCarrito();
+    verCarrito(); // Refrescar el modal
+}
+
+// Procesar compra (funcionalidad básica)
+document.getElementById('btnProcesarCompra').onclick = function() {
+    alert('¡Gracias por tu compra! En una tienda real, aquí se procesaría el pago.');
+    // Limpiar carrito después de "compra"
+    carrito = [];
+    localStorage.removeItem('carrito');
+    actualizarContadorCarrito();
+    
+    // Cerrar modal
+    const modal = bootstrap.Modal.getInstance(document.getElementById('carritoModal'));
+    modal.hide();
+};
+</script>
 {% endblock %}
