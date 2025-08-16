@@ -61,9 +61,9 @@
                     {% endif %}
                     
                     <!-- Badge de oferta -->
-                    {% if camiseta.tiene_oferta %}
+                    {% if camiseta.precio_oferta %}
                     <span class="position-absolute top-0 start-0 badge bg-danger m-2">
-                        -{{ camiseta.descuento_porcentaje }}%
+                        OFERTA
                     </span>
                     {% endif %}
                     
@@ -78,7 +78,7 @@
                 <div class="card-body d-flex flex-column">
                     <div class="mb-auto">
                         <h5 class="card-title text-primary">{{ camiseta.equipo }}</h5>
-                        <p class="card-text text-muted mb-1">{{ camiseta.temporada }} - {{ camiseta.get_tipo_display }}</p>
+                        <p class="card-text text-muted mb-1">{{ camiseta.temporada }} - {{ camiseta.tipo|capfirst }}</p>
                         <p class="card-text">
                             <small class="text-muted">
                                 <i class="fas fa-tag"></i> Talla: {{ camiseta.talla }}
@@ -93,7 +93,7 @@
 
                     <!-- Precios -->
                     <div class="price-section mb-3">
-                        {% if camiseta.tiene_oferta %}
+                        {% if camiseta.precio_oferta %}
                         <span class="h5 text-success me-2">${{ camiseta.precio_oferta }}</span>
                         <span class="text-muted text-decoration-line-through">${{ camiseta.precio }}</span>
                         {% else %}

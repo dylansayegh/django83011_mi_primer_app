@@ -1,0 +1,49 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Camisetas{% endblock %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <h1 class="text-center mb-4">🏆 CATÁLOGO DE CAMISETAS RETRO</h1>
+    
+    <div class="row">
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Barcelona 1992</h5>
+                    <p class="card-text">Talla: M</p>
+                    <p class="h5 text-success">$69.99</p>
+                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Real Madrid 1998</h5>
+                    <p class="card-text">Talla: L</p>
+                    <p class="h5 text-primary">$79.99</p>
+                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="col-md-4 mb-3">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title">Argentina 1986</h5>
+                    <p class="card-text">Talla: M</p>
+                    <p class="h5 text-primary">$129.99</p>
+                    <a href="#" class="btn btn-primary">Ver Detalles</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <p class="lead">¡Las mejores camisetas retro están aquí!</p>
+        <a href="{% url 'mi_primer_app:home' %}" class="btn btn-secondary">← Volver al Inicio</a>
+    </div>
+</div>
+{% endblock %}

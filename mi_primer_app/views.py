@@ -14,16 +14,16 @@ import uuid
 # --- VISTAS PRINCIPALES ---
 def pagina_inicio(request):
     """Vista de la página de inicio"""
-    # Mostrar algunas camisetas destacadas
-    camisetas_destacadas = Camiseta.objects.filter(activa=True, tiene_oferta=True)[:3]
+    # Mostrar algunas camisetas destacadas (con ofertas)
+    camisetas_destacadas = Camiseta.objects.filter(activa=True, precio_oferta__isnull=False)[:3]
     return render(request, 'mi_primer_app/inicio.html', {
         'camisetas_destacadas': camisetas_destacadas
     })
 
 def pagina_camisetas(request):
-    """Vista del catálogo de camisetas"""
-    camisetas = Camiseta.objects.filter(activa=True).order_by('equipo', 'temporada')
-    return render(request, 'mi_primer_app/camisetas.html', {'camisetas': camisetas})
+    """Vista del catálogo de camisetas - versión básica"""
+    # Template básico sin usar la base de datos por ahora
+    return render(request, 'mi_primer_app/camisetas_basico.html')
 
 def detalle_camiseta(request, camiseta_id):
     """Vista de detalle de una camiseta específica"""
