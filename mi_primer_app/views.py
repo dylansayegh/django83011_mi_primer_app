@@ -14,7 +14,11 @@ import uuid
 # --- VISTAS PRINCIPALES ---
 def pagina_inicio(request):
     """Vista de la página de inicio"""
-    return render(request, 'mi_primer_app/inicio.html')
+    # Mostrar algunas camisetas destacadas
+    camisetas_destacadas = Camiseta.objects.filter(activa=True, tiene_oferta=True)[:3]
+    return render(request, 'mi_primer_app/inicio.html', {
+        'camisetas_destacadas': camisetas_destacadas
+    })
 
 def pagina_camisetas(request):
     """Vista del catálogo de camisetas"""
@@ -25,6 +29,12 @@ def detalle_camiseta(request, camiseta_id):
     """Vista de detalle de una camiseta específica"""
     camiseta = get_object_or_404(Camiseta, id=camiseta_id, activa=True)
     return render(request, 'mi_primer_app/detalle_camiseta.html', {'camiseta': camiseta})
+
+@login_required
+def mis_compras(request):
+    """Vista de historial de compras del usuario"""
+    ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha_creacion')
+    return render(request, 'mi_primer_app/mis_compras.html', {'ordenes': ordenes})
 
 # --- UTILIDAD PARA CARRITO ---
 def obtener_o_crear_carrito(usuario):

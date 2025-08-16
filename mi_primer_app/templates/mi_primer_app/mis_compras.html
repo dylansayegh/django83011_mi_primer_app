@@ -1,0 +1,105 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Mis Compras - CAMISETAS RETRO DS{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-shopping-bag"></i> Mis Compras</h1>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary">
+                    <i class="fas fa-plus"></i> Seguir Comprando
+                </a>
+            </div>
+        </div>
+    </div>
+
+    {% if ordenes %}
+    <div class="row">
+        {% for orden in ordenes %}
+        <div class="col-12 mb-4">
+            <div class="card shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center">
+                    <h5 class="mb-0">
+                        <i class="fas fa-receipt"></i> Orden #{{ orden.numero_orden }}
+                    </h5>
+                    <span class="badge bg-{% if orden.estado == 'completada' %}success{% elif orden.estado == 'pendiente' %}warning{% else %}secondary{% endif %}">
+                        {{ orden.get_estado_display }}
+                    </span>
+                </div>
+                <div class="card-body">
+                    <div class="row mb-3">
+                        <div class="col-md-6">
+                            <p><strong>Fecha:</strong> {{ orden.fecha_creacion|date:"d/m/Y H:i" }}</p>
+                            <p><strong>Total:</strong> <span class="h5 text-success">${{ orden.total }}</span></p>
+                        </div>
+                        <div class="col-md-6">
+                            <p><strong>Método de Pago:</strong> {{ orden.get_metodo_pago_display }}</p>
+                            <p><strong>Estado:</strong> {{ orden.get_estado_display }}</p>
+                        </div>
+                    </div>
+                    
+                    <h6><i class="fas fa-list"></i> Productos:</h6>
+                    <div class="row">
+                        {% for item in orden.itemorden_set.all %}
+                        <div class="col-md-6 col-lg-4 mb-3">
+                            <div class="border rounded p-3">
+                                <div class="d-flex">
+                                    {% if item.camiseta.imagen %}
+                                        <img src="{{ item.camiseta.imagen }}" 
+                                             alt="{{ item.camiseta.equipo }}" 
+                                             class="me-3" 
+                                             style="width: 60px; height: 60px; object-fit: cover;">
+                                    {% else %}
+                                        <div class="me-3 d-flex align-items-center justify-content-center bg-light" 
+                                             style="width: 60px; height: 60px;">
+                                            <i class="fas fa-tshirt text-muted"></i>
+                                        </div>
+                                    {% endif %}
+                                    <div class="flex-grow-1">
+                                        <h6 class="mb-1">{{ item.camiseta.equipo }}</h6>
+                                        <small class="text-muted">{{ item.camiseta.temporada }} - {{ item.camiseta.talla }}</small>
+                                        <br>
+                                        <small>Cantidad: {{ item.cantidad }} x ${{ item.precio_unitario }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="row">
+        <div class="col-12">
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-4"></i>
+                <h3 class="text-muted">No tienes compras aún</h3>
+                <p class="text-muted mb-4">¡Explora nuestro catálogo y encuentra tu camiseta retro favorita!</p>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-shopping-bag"></i> Ver Catálogo
+                </a>
+            </div>
+        </div>
+    </div>
+    {% endif %}
+</div>
+
+<style>
+.card {
+    transition: all 0.3s ease;
+}
+
+.card:hover {
+    transform: translateY(-2px);
+}
+
+.badge {
+    font-size: 0.9em;
+}
+</style>
+{% endblock %}

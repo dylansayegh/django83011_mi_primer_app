@@ -38,9 +38,16 @@
                     </li>
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'mi_primer_app:camisetas' %}">
-                            <i class="fas fa-tshirt"></i> Tienda
+                            <i class="fas fa-tshirt"></i> Camisetas
                         </a>
                     </li>
+                    {% if user.is_authenticated %}
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'mi_primer_app:mis_compras' %}">
+                            <i class="fas fa-shopping-bag"></i> Mis Compras
+                        </a>
+                    </li>
+                    {% endif %}
                     <li class="nav-item">
                         <a class="nav-link" href="{% url 'pages:page_list' %}">
                             <i class="fas fa-file-alt"></i> Blog
