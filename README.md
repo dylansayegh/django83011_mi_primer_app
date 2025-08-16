@@ -140,7 +140,7 @@ django83011_mi_primer_app/
 ## 📞 Contacto y Soporte
 
 **Dylan Sayegh** - Desarrollador  
-📧 Email: tu-email@ejemplo.com  
+📧 Email: dylansayeg18@gmail.com  
 🐙 GitHub: [@dylansayegh](https://github.com/dylansayegh)  
 
 ## 📄 Licencia

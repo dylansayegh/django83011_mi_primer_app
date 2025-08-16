@@ -76,7 +76,7 @@ ALLOWED_HOSTS=tu-dominio.com,www.tu-dominio.com
 # Opcionales
 DATABASE_URL=postgres://...
 EMAIL_HOST=smtp.gmail.com
-EMAIL_HOST_USER=contacto@camisetasretro.com
+EMAIL_HOST_USER=dylansayeg18@gmail.com
 ```
 
 ---
