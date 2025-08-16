@@ -14,9 +14,7 @@ Aplicación web desarrollada en Django 5.x con:
 - Búsqueda y filtrado de camisetas
 
 ## Instalación y ejecución
-1. Clona el repositorio:
-   ```
-   git clone <URL_DE_TU_REPO>
+
    cd mi_primer_app
    ```
 2. Instala dependencias:
