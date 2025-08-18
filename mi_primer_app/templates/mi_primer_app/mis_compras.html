@@ -286,30 +286,12 @@
             <div class="card border-0 shadow-sm">
                 <div class="card-body text-center py-5">
                     <h4 class="mb-4">¿Necesitas ayuda con tu pedido?</h4>
-                    <div class="row">
-                        <div class="col-md-3 mb-3">
-                            <button class="btn btn-outline-primary btn-lg w-100" onclick="contactarSoporte()">
-                                <i class="fas fa-headset fa-2x d-block mb-2"></i>
-                                Soporte 24/7
-                            </button>
-                        </div>
-                        <div class="col-md-3 mb-3">
+                    <div class="row justify-content-center">
+                        <div class="col-md-6">
                             <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-success btn-lg w-100">
                                 <i class="fas fa-shopping-bag fa-2x d-block mb-2"></i>
                                 Seguir Comprando
                             </a>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <button class="btn btn-outline-warning btn-lg w-100" onclick="programarDevolucion()">
-                                <i class="fas fa-undo fa-2x d-block mb-2"></i>
-                                Devolver Producto
-                            </button>
-                        </div>
-                        <div class="col-md-3 mb-3">
-                            <button class="btn btn-outline-info btn-lg w-100" onclick="descargarHistorial()">
-                                <i class="fas fa-file-pdf fa-2x d-block mb-2"></i>
-                                Descargar Historial
-                            </button>
                         </div>
                     </div>
                 </div>
@@ -477,18 +459,6 @@ function calificarPedido(pedidoId) {
 
 function descargarFactura(pedidoId) {
     alert('📄 Descargando factura del pedido ' + pedidoId + '...');
-}
-
-function contactarSoporte() {
-    alert('📞 Nuestro equipo de soporte te contactará en las próximas 2 horas.');
-}
-
-function programarDevolucion() {
-    alert('📦 Te enviaremos las instrucciones de devolución por email.');
-}
-
-function descargarHistorial() {
-    alert('📊 Descargando historial completo en PDF...');
 }
 </script>
 

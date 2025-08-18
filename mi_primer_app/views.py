@@ -222,13 +222,6 @@ def orden_confirmacion(request, orden_id):
     context = {'orden': orden}
     return render(request, 'mi_primer_app/orden_confirmacion.html', context)
 
-@login_required
-def mis_ordenes(request):
-    """Vista para mostrar historial de órdenes del usuario"""
-    ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha_creacion')
-    context = {'ordenes': ordenes}
-    return render(request, 'mi_primer_app/mis_ordenes.html', context)
-
 def detalle_camiseta(request, camiseta_id):
     """Vista para mostrar detalle de una camiseta"""
     camiseta = get_object_or_404(Camiseta, id=camiseta_id, activa=True)

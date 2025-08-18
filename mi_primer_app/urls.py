@@ -21,7 +21,6 @@ urlpatterns = [
     # Checkout y órdenes
     path('checkout/', views.checkout, name='checkout'),
     path('orden/<int:orden_id>/confirmacion/', views.orden_confirmacion, name='orden_confirmacion'),
-    path('mis-ordenes/', views.mis_ordenes, name='mis_ordenes'),
     
     # Rutas legacy mantenidas para compatibilidad
     path('mis-compras/', views.mis_compras, name='mis-compras'),
