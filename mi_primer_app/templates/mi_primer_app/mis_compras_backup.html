@@ -404,20 +404,20 @@ function verDetallePedido(pedidoId) {
     const detalle = detalles[pedidoId];
     if (!detalle) return;
 
-    const contenido = \`
+    const contenido = `
         <div class="row">
             <div class="col-md-6">
                 <h6>Información del Pedido</h6>
                 <table class="table table-borderless">
-                    <tr><td><strong>Número:</strong></td><td>\${pedidoId}</td></tr>
-                    <tr><td><strong>Fecha:</strong></td><td>\${detalle.fecha}</td></tr>
-                    <tr><td><strong>Estado:</strong></td><td><span class="badge bg-success">\${detalle.estado}</span></td></tr>
-                    <tr><td><strong>Tracking:</strong></td><td>\${detalle.tracking}</td></tr>
+                    <tr><td><strong>Número:</strong></td><td>${pedidoId}</td></tr>
+                    <tr><td><strong>Fecha:</strong></td><td>${detalle.fecha}</td></tr>
+                    <tr><td><strong>Estado:</strong></td><td><span class="badge bg-success">${detalle.estado}</span></td></tr>
+                    <tr><td><strong>Tracking:</strong></td><td>${detalle.tracking}</td></tr>
                 </table>
             </div>
             <div class="col-md-6">
                 <h6>Dirección de Envío</h6>
-                <p class="text-muted">\${detalle.direccion}</p>
+                <p class="text-muted">${detalle.direccion}</p>
             </div>
         </div>
         
@@ -433,24 +433,24 @@ function verDetallePedido(pedidoId) {
                     </tr>
                 </thead>
                 <tbody>
-                    \${detalle.productos.map(producto => \`
+                    ${detalle.productos.map(producto => `
                         <tr>
-                            <td>\${producto.nombre}</td>
-                            <td>\${producto.cantidad}</td>
-                            <td>\${producto.precio}</td>
-                            <td><strong>\${producto.subtotal}</strong></td>
+                            <td>${producto.nombre}</td>
+                            <td>${producto.cantidad}</td>
+                            <td>${producto.precio}</td>
+                            <td><strong>${producto.subtotal}</strong></td>
                         </tr>
-                    \`).join('')}
+                    `).join('')}
                 </tbody>
                 <tfoot>
                     <tr>
                         <th colspan="3">TOTAL</th>
-                        <th>\${detalle.total}</th>
+                        <th>${detalle.total}</th>
                     </tr>
                 </tfoot>
             </table>
         </div>
-    \`;
+    `;
 
     document.getElementById('detallePedidoContenido').innerHTML = contenido;
     const modal = new bootstrap.Modal(document.getElementById('detallePedidoModal'));
@@ -502,18 +502,7 @@ function descargarHistorial() {
 }
 
 .badge {
-    font-size: 0.85rem;
-    font-weight: 500;
-}
-
-.table th {
-    font-weight: 600;
-    color: #495057;
-}
-
-.btn-group-sm .btn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.875rem;
+    font-size: 0.9em;
 }
 </style>
 {% endblock %}

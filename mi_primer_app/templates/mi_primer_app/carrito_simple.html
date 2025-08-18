@@ -1,0 +1,261 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Mi Carrito de Compras{% endblock %}
+
+{% block contenido %}
+<div class="container">
+    <div class="row">
+        <div class="col-12">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h1><i class="fas fa-shopping-cart text-primary"></i> Mi Carrito</h1>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-primary">
+                    <i class="fas fa-plus"></i> Seguir Comprando
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <!-- Contenido del carrito (cargado dinámicamente con JavaScript) -->
+    <div id="carrito-container">
+        <div class="text-center py-5">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Cargando...</span>
+            </div>
+            <p class="mt-2">Cargando carrito...</p>
+        </div>
+    </div>
+</div>
+
+<script>
+// Cargar carrito desde localStorage
+document.addEventListener('DOMContentLoaded', function() {
+    cargarCarrito();
+});
+
+function cargarCarrito() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    const container = document.getElementById('carrito-container');
+    
+    if (carrito.length === 0) {
+        container.innerHTML = `
+            <div class="text-center py-5">
+                <i class="fas fa-shopping-cart fa-5x text-muted mb-3"></i>
+                <h3>Tu carrito está vacío</h3>
+                <p class="text-muted">¡Agrega algunas camisetas retro increíbles!</p>
+                <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-primary btn-lg">
+                    <i class="fas fa-tshirt"></i> Explorar Camisetas
+                </a>
+            </div>
+        `;
+        return;
+    }
+    
+    let total = 0;
+    let carritoHTML = `
+        <div class="row">
+            <div class="col-lg-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-list"></i> Productos en tu carrito</h5>
+                    </div>
+                    <div class="card-body p-0">
+    `;
+    
+    carrito.forEach((item, index) => {
+        const subtotal = item.precio * item.cantidad;
+        total += subtotal;
+        
+        carritoHTML += `
+            <div class="border-bottom p-4 cart-item-${index}">
+                <div class="row align-items-center">
+                    <div class="col-md-2">
+                        <img src="${item.imagen}" alt="${item.nombre}" class="img-fluid rounded" style="height: 80px; object-fit: cover;">
+                    </div>
+                    <div class="col-md-4">
+                        <h6 class="mb-1">${item.nombre}</h6>
+                        <small class="text-muted">Talla: ${item.talla || 'M'}</small>
+                    </div>
+                    <div class="col-md-2">
+                        <span class="fw-bold text-success">$${item.precio.toFixed(2)}</span>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="input-group input-group-sm">
+                            <button class="btn btn-outline-secondary" onclick="cambiarCantidad(${index}, -1)">-</button>
+                            <input type="text" class="form-control text-center" value="${item.cantidad}" readonly>
+                            <button class="btn btn-outline-secondary" onclick="cambiarCantidad(${index}, 1)">+</button>
+                        </div>
+                    </div>
+                    <div class="col-md-2 text-end">
+                        <div class="fw-bold">$${subtotal.toFixed(2)}</div>
+                        <button class="btn btn-sm btn-outline-danger mt-1" onclick="eliminarDelCarrito(${index})">
+                            <i class="fas fa-trash"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+        `;
+    });
+    
+    carritoHTML += `
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="card">
+                    <div class="card-header">
+                        <h5 class="mb-0"><i class="fas fa-calculator"></i> Resumen del pedido</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Subtotal (${carrito.length} productos):</span>
+                            <span>$${total.toFixed(2)}</span>
+                        </div>
+                        <div class="d-flex justify-content-between mb-2">
+                            <span>Envío:</span>
+                            <span class="text-success">GRATIS</span>
+                        </div>
+                        <hr>
+                        <div class="d-flex justify-content-between mb-3">
+                            <strong>Total:</strong>
+                            <strong class="text-success">$${total.toFixed(2)}</strong>
+                        </div>
+                        <button class="btn btn-success btn-lg w-100 mb-2" onclick="procederAlCheckout()">
+                            <i class="fas fa-credit-card"></i> Proceder al Checkout
+                        </button>
+                        <button class="btn btn-outline-danger w-100" onclick="limpiarCarrito()">
+                            <i class="fas fa-trash"></i> Vaciar Carrito
+                        </button>
+                    </div>
+                </div>
+                
+                <!-- Productos recomendados -->
+                <div class="card mt-3">
+                    <div class="card-header">
+                        <h6 class="mb-0"><i class="fas fa-star"></i> Productos recomendados</h6>
+                    </div>
+                    <div class="card-body">
+                        <div class="row">
+                            <div class="col-12 mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://i.imgur.com/yGQpQoC.jpg" class="me-2 rounded" width="40" height="40" alt="Barcelona">
+                                    <div>
+                                        <small class="fw-bold">Barcelona 1992</small><br>
+                                        <small class="text-success">$69.99</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-12 mb-2">
+                                <div class="d-flex align-items-center">
+                                    <img src="https://i.imgur.com/O8zBJpg.jpg" class="me-2 rounded" width="40" height="40" alt="Real Madrid">
+                                    <div>
+                                        <small class="fw-bold">Real Madrid 1998</small><br>
+                                        <small class="text-success">$79.99</small>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    `;
+    
+    container.innerHTML = carritoHTML;
+}
+
+function cambiarCantidad(index, cambio) {
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    
+    if (carrito[index]) {
+        carrito[index].cantidad += cambio;
+        
+        if (carrito[index].cantidad <= 0) {
+            carrito.splice(index, 1);
+        }
+        
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        cargarCarrito(); // Recargar el carrito
+        
+        // Mostrar notificación
+        mostrarNotificacion(cambio > 0 ? 'Cantidad aumentada' : 'Cantidad reducida', 'info');
+    }
+}
+
+function eliminarDelCarrito(index) {
+    let carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    
+    if (confirm('¿Estás seguro de que quieres eliminar este producto?')) {
+        carrito.splice(index, 1);
+        localStorage.setItem('carrito', JSON.stringify(carrito));
+        cargarCarrito();
+        mostrarNotificacion('Producto eliminado del carrito', 'success');
+    }
+}
+
+function limpiarCarrito() {
+    if (confirm('¿Estás seguro de que quieres vaciar todo el carrito?')) {
+        localStorage.removeItem('carrito');
+        cargarCarrito();
+        mostrarNotificacion('Carrito vaciado', 'info');
+    }
+}
+
+function procederAlCheckout() {
+    const carrito = JSON.parse(localStorage.getItem('carrito')) || [];
+    
+    if (carrito.length === 0) {
+        mostrarNotificacion('Tu carrito está vacío', 'warning');
+        return;
+    }
+    
+    // Simular proceso de checkout
+    mostrarNotificacion('Redirigiendo al checkout...', 'success');
+    
+    // Aquí podrías redirigir a una página de checkout real
+    setTimeout(() => {
+        alert('🎉 ¡Pedido realizado con éxito! Gracias por tu compra.');
+        localStorage.removeItem('carrito');
+        cargarCarrito();
+    }, 2000);
+}
+
+function mostrarNotificacion(mensaje, tipo = 'info') {
+    const alertas = {
+        'success': 'alert-success',
+        'danger': 'alert-danger',
+        'warning': 'alert-warning',
+        'info': 'alert-info'
+    };
+    
+    const alertDiv = document.createElement('div');
+    alertDiv.className = `alert ${alertas[tipo]} alert-dismissible fade show position-fixed`;
+    alertDiv.style.cssText = 'top: 20px; right: 20px; z-index: 9999; min-width: 300px;';
+    alertDiv.innerHTML = `
+        ${mensaje}
+        <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+    
+    document.body.appendChild(alertDiv);
+    
+    setTimeout(() => {
+        if (alertDiv.parentNode) {
+            alertDiv.parentNode.removeChild(alertDiv);
+        }
+    }, 4000);
+}
+</script>
+
+<style>
+.cart-item-row {
+    transition: all 0.3s ease;
+}
+
+.cart-item-row:hover {
+    background-color: #f8f9fa;
+}
+
+.input-group-sm .btn {
+    padding: 0.25rem 0.5rem;
+}
+</style>
+{% endblock %}

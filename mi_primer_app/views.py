@@ -29,21 +29,15 @@ def detalle_camiseta(request, camiseta_id):
 
 @login_required
 def mis_compras(request):
-    """Vista de historial de compras del usuario"""
-    ordenes = Orden.objects.filter(usuario=request.user).order_by('-fecha_creacion')
-    return render(request, 'mi_primer_app/mis_compras.html', {'ordenes': ordenes})
+    """Vista de historial de compras del usuario - versión básica"""
+    # Datos de ejemplo sin acceso a base de datos
+    return render(request, 'mi_primer_app/mis_compras.html')
 
 # --- UTILIDAD PARA CARRITO ---
 def obtener_o_crear_carrito(usuario):
     """Obtiene o crea un carrito para el usuario"""
     carrito, created = Carrito.objects.get_or_create(usuario=usuario)
     return carrito
-
-# --- VISTA DE HISTORIAL DE COMPRAS ---
-@login_required
-def mis_compras(request):
-    compras = Compra.objects.filter(usuario=request.user).select_related('camiseta').order_by('-fecha')
-    return render(request, 'mi_primer_app/mis-compras.html', {'compras': compras})
 
 # --- VISTA DE COMPRA DE CAMISETAS ---
 @login_required
@@ -105,17 +99,10 @@ def obtener_o_crear_carrito(usuario):
     carrito, created = Carrito.objects.get_or_create(usuario=usuario)
     return carrito
 
-@login_required
 def ver_carrito(request):
-    """Vista para mostrar el contenido del carrito"""
-    carrito = obtener_o_crear_carrito(request.user)
-    context = {
-        'carrito': carrito,
-        'items': carrito.items.all(),
-        'total_items': carrito.total_items,
-        'total_precio': carrito.total_precio,
-    }
-    return render(request, 'mi_primer_app/carrito.html', context)
+    """Vista para mostrar el contenido del carrito - versión básica"""
+    # Template básico sin usar la base de datos por ahora
+    return render(request, 'mi_primer_app/carrito_simple.html')
 
 @login_required
 @require_POST

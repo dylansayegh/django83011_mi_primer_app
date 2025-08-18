@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.forms import UserCreationForm
-from django.contrib.auth import login
+from django.contrib.auth import login, logout
 from django.contrib import messages
 from .models import Profile
 
@@ -28,6 +28,16 @@ def signup(request):
         form = UserCreationForm()
     
     return render(request, 'accounts/signup.html', {'form': form})
+
+@login_required
+def custom_logout(request):
+    """Vista personalizada para logout con redirección amigable"""
+    if request.method == 'POST':
+        logout(request)
+        return redirect('/auth/login/?logged_out=1')
+    else:
+        # Si es GET, redirigir al perfil
+        return redirect('accounts:profile')
 
 def about(request):
     """Vista de información personal del desarrollador"""

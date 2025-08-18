@@ -49,11 +49,6 @@
                     </li>
                     {% endif %}
                     <li class="nav-item">
-                        <a class="nav-link" href="{% url 'pages:page_list' %}">
-                            <i class="fas fa-file-alt"></i> Blog
-                        </a>
-                    </li>
-                    <li class="nav-item">
                         <a class="nav-link" href="{% url 'accounts:about' %}">
                             <i class="fas fa-info-circle"></i> Acerca de
                         </a>
@@ -81,13 +76,15 @@
                                 <li><a class="dropdown-item" href="{% url 'mi_primer_app:mis_ordenes' %}">
                                     <i class="fas fa-shopping-bag"></i> Mis Órdenes
                                 </a></li>
-                                <li><a class="dropdown-item" href="{% url 'pages:page_create' %}">
-                                    <i class="fas fa-plus"></i> Nueva Página
-                                </a></li>
                                 <li><hr class="dropdown-divider"></li>
-                                <li><a class="dropdown-item" href="{% url 'logout' %}">
-                                    <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                                </a></li>
+                                <li>
+                                    <form method="post" action="{% url 'accounts:logout' %}" style="margin: 0;">
+                                        {% csrf_token %}
+                                        <button type="submit" class="dropdown-item" style="border: none; background: none; width: 100%; text-align: left;">
+                                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                                        </button>
+                                    </form>
+                                </li>
                             </ul>
                         </li>
                     {% else %}

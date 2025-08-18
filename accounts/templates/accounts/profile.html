@@ -66,12 +66,12 @@
                         <a href="{% url 'mi_primer_app:home' %}" class="btn btn-primary">
                             <i class="fas fa-home"></i> Volver al Inicio
                         </a>
-                        <a href="{% url 'pages:page_list' %}" class="btn btn-secondary">
-                            <i class="fas fa-file-alt"></i> Mis Páginas
-                        </a>
-                        <a href="{% url 'logout' %}" class="btn btn-danger">
-                            <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
-                        </a>
+                        <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger">
+                                <i class="fas fa-sign-out-alt"></i> Cerrar Sesión
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>
