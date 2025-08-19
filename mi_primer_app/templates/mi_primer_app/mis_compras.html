@@ -44,54 +44,6 @@
         </div>
     </div>
 
-    <!-- Stats Cards -->
-    <div class="row mb-5">
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-primary mb-3">
-                        <i class="fas fa-shopping-cart fa-3x"></i>
-                    </div>
-                    <h3 class="text-primary">12</h3>
-                    <p class="text-muted mb-0">Pedidos Totales</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-success mb-3">
-                        <i class="fas fa-dollar-sign fa-3x"></i>
-                    </div>
-                    <h3 class="text-success">$1,247</h3>
-                    <p class="text-muted mb-0">Total Gastado</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-warning mb-3">
-                        <i class="fas fa-tshirt fa-3x"></i>
-                    </div>
-                    <h3 class="text-warning">25</h3>
-                    <p class="text-muted mb-0">Camisetas Compradas</p>
-                </div>
-            </div>
-        </div>
-        <div class="col-lg-3 col-md-6 mb-4">
-            <div class="card border-0 shadow-sm h-100">
-                <div class="card-body text-center">
-                    <div class="text-info mb-3">
-                        <i class="fas fa-heart fa-3x"></i>
-                    </div>
-                    <h3 class="text-info">8</h3>
-                    <p class="text-muted mb-0">Equipos Favoritos</p>
-                </div>
-            </div>
-        </div>
-    </div>
-
     <!-- Orders History -->
     <div class="row">
         <div class="col-12">
@@ -119,7 +71,6 @@
                                     <th class="border-0 fw-semibold">Productos</th>
                                     <th class="border-0 fw-semibold">Total</th>
                                     <th class="border-0 fw-semibold">Estado</th>
-                                    <th class="border-0 fw-semibold">Acciones</th>
                                 </tr>
                             </thead>
                             <tbody>
@@ -144,7 +95,8 @@
                                     </td>
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/40x40?text=BAR" class="rounded me-2" alt="Barcelona">
+                                            {% load static %}
+                                            <img src="{% static 'images/camisetas/barcelona_1992.jpg' %}" class="rounded me-2" alt="Barcelona" style="width: 40px; height: 40px; object-fit: cover;">
                                             <div>
                                                 <div class="fw-semibold">Barcelona 1992</div>
                                                 <small class="text-muted">Cantidad: 2</small>
@@ -159,23 +111,10 @@
                                             <i class="fas fa-check-circle me-1"></i>Entregado
                                         </span>
                                     </td>
-                                    <td class="py-4">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" onclick="verDetallePedido('ORD-2025-001')">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-success" onclick="repetirPedido('ORD-2025-001')">
-                                                <i class="fas fa-redo"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info" onclick="descargarFactura('ORD-2025-001')">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
-                                    </td>
                                 </tr>
 
                                 <!-- Pedido 2 -->
-                                <tr class="order-row" data-status="pending">
+                                <tr class="order-row" data-status="transit">
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
                                             <div class="bg-warning rounded-circle p-2 me-3">
@@ -195,7 +134,7 @@
                                     </td>
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/40x40?text=RM" class="rounded me-2" alt="Real Madrid">
+                                            <img src="{% static 'images/camisetas/real_madrid_1998.jpg' %}" class="rounded me-2" alt="Real Madrid" style="width: 40px; height: 40px; object-fit: cover;">
                                             <div>
                                                 <div class="fw-semibold">Real Madrid 1998</div>
                                                 <small class="text-muted">Cantidad: 1</small>
@@ -210,19 +149,47 @@
                                             <i class="fas fa-shipping-fast me-1"></i>En tránsito
                                         </span>
                                     </td>
+                                </tr>
+
+                                <!-- Pedido 3 - Agregando uno pendiente -->
+                                <tr class="order-row" data-status="pending">
                                     <td class="py-4">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" onclick="seguirPedido('ORD-2025-002')">
-                                                <i class="fas fa-map-marker-alt"></i>
-                                            </button>
-                                            <button class="btn btn-outline-danger" onclick="cancelarPedido('ORD-2025-002')">
-                                                <i class="fas fa-times"></i>
-                                            </button>
+                                        <div class="d-flex align-items-center">
+                                            <div class="bg-danger rounded-circle p-2 me-3">
+                                                <i class="fas fa-hourglass-half text-white"></i>
+                                            </div>
+                                            <div>
+                                                <h6 class="mb-0">#ORD-2025-003</h6>
+                                                <small class="text-muted">ID: 12347</small>
+                                            </div>
                                         </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <div>
+                                            <div class="fw-semibold">18 Agosto 2025</div>
+                                            <small class="text-muted">10:00 AM</small>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <div class="d-flex align-items-center">
+                                            <img src="{% static 'images/camisetas/argentina_1986.jpg' %}" class="rounded me-2" alt="Argentina" style="width: 40px; height: 40px; object-fit: cover;">
+                                            <div>
+                                                <div class="fw-semibold">Argentina 1986</div>
+                                                <small class="text-muted">Cantidad: 1</small>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td class="py-4">
+                                        <span class="fw-bold text-danger">$129.99</span>
+                                    </td>
+                                    <td class="py-4">
+                                        <span class="badge bg-danger-subtle text-danger px-3 py-2">
+                                            <i class="fas fa-hourglass-half me-1"></i>Pendiente
+                                        </span>
                                     </td>
                                 </tr>
 
-                                <!-- Pedido 3 -->
+                                <!-- Pedido 4 -->
                                 <tr class="order-row" data-status="completed">
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
@@ -230,8 +197,8 @@
                                                 <i class="fas fa-check text-white"></i>
                                             </div>
                                             <div>
-                                                <h6 class="mb-0">#ORD-2025-003</h6>
-                                                <small class="text-muted">ID: 12347</small>
+                                                <h6 class="mb-0">#ORD-2025-004</h6>
+                                                <small class="text-muted">ID: 12348</small>
                                             </div>
                                         </div>
                                     </td>
@@ -243,33 +210,20 @@
                                     </td>
                                     <td class="py-4">
                                         <div class="d-flex align-items-center">
-                                            <img src="https://via.placeholder.com/40x40?text=ARG" class="rounded me-2" alt="Argentina">
+                                            <img src="{% static 'images/camisetas/barcelona_1992.jpg' %}" class="rounded me-2" alt="Barcelona" style="width: 40px; height: 40px; object-fit: cover;">
                                             <div>
-                                                <div class="fw-semibold">Argentina 1986</div>
+                                                <div class="fw-semibold">Barcelona 1992</div>
                                                 <small class="text-muted">Cantidad: 1</small>
                                             </div>
                                         </div>
                                     </td>
                                     <td class="py-4">
-                                        <span class="fw-bold text-success">$129.99</span>
+                                        <span class="fw-bold text-success">$89.99</span>
                                     </td>
                                     <td class="py-4">
                                         <span class="badge bg-success-subtle text-success px-3 py-2">
                                             <i class="fas fa-star me-1"></i>Completado
                                         </span>
-                                    </td>
-                                    <td class="py-4">
-                                        <div class="btn-group btn-group-sm">
-                                            <button class="btn btn-outline-primary" onclick="verDetallePedido('ORD-2025-003')">
-                                                <i class="fas fa-eye"></i>
-                                            </button>
-                                            <button class="btn btn-outline-warning" onclick="calificarPedido('ORD-2025-003')">
-                                                <i class="fas fa-star"></i>
-                                            </button>
-                                            <button class="btn btn-outline-info" onclick="descargarFactura('ORD-2025-003')">
-                                                <i class="fas fa-download"></i>
-                                            </button>
-                                        </div>
                                     </td>
                                 </tr>
                             </tbody>
@@ -327,6 +281,28 @@ document.addEventListener('DOMContentLoaded', function() {
     const filterButtons = document.querySelectorAll('[data-filter]');
     const orderRows = document.querySelectorAll('.order-row');
 
+    // Función para mostrar conteo de pedidos
+    function updateCounts() {
+        const allCount = orderRows.length;
+        const completedCount = document.querySelectorAll('.order-row[data-status="completed"]').length;
+        const pendingCount = document.querySelectorAll('.order-row[data-status="pending"]').length + 
+                           document.querySelectorAll('.order-row[data-status="transit"]').length;
+        
+        // Actualizar textos de botones (opcional)
+        filterButtons.forEach(btn => {
+            const filter = btn.getAttribute('data-filter');
+            const originalText = btn.textContent.split(' (')[0]; // Quitar conteo previo
+            
+            if (filter === 'all') {
+                btn.textContent = `${originalText} (${allCount})`;
+            } else if (filter === 'completed') {
+                btn.textContent = `${originalText} (${completedCount})`;
+            } else if (filter === 'pending') {
+                btn.textContent = `${originalText} (${pendingCount})`;
+            }
+        });
+    }
+
     filterButtons.forEach(button => {
         button.addEventListener('click', function() {
             // Remover clase active de todos los botones
@@ -337,15 +313,38 @@ document.addEventListener('DOMContentLoaded', function() {
             const filter = this.getAttribute('data-filter');
             
             orderRows.forEach(row => {
+                const status = row.getAttribute('data-status');
+                let shouldShow = false;
+                
                 if (filter === 'all') {
+                    shouldShow = true;
+                } else if (filter === 'completed') {
+                    shouldShow = status === 'completed';
+                } else if (filter === 'pending') {
+                    shouldShow = status === 'pending' || status === 'transit';
+                }
+                
+                // Mostrar u ocultar fila con animación
+                if (shouldShow) {
                     row.style.display = '';
+                    row.style.opacity = '0';
+                    setTimeout(() => {
+                        row.style.opacity = '1';
+                        row.style.transition = 'opacity 0.3s ease';
+                    }, 50);
                 } else {
-                    const status = row.getAttribute('data-status');
-                    row.style.display = status === filter ? '' : 'none';
+                    row.style.opacity = '0';
+                    row.style.transition = 'opacity 0.3s ease';
+                    setTimeout(() => {
+                        row.style.display = 'none';
+                    }, 300);
                 }
             });
         });
     });
+    
+    // Inicializar conteos
+    updateCounts();
 });
 
 // Funciones para los botones

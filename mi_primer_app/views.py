@@ -7,6 +7,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib import messages
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
+from django.db.models import Sum
 from .models import Camiseta, Cliente, Compra, Carrito, ItemCarrito, Orden, ItemOrden
 import json
 import uuid
@@ -160,8 +161,20 @@ def detalle_camiseta(request, camiseta_id):
 @login_required
 def mis_compras(request):
     """Vista de historial de compras del usuario - versión básica"""
-    # Datos de ejemplo sin acceso a base de datos
-    return render(request, 'mi_primer_app/mis_compras.html')
+    
+    # Calcular total de camisetas compradas por el usuario
+    try:
+        total_camisetas = Compra.objects.filter(usuario=request.user).aggregate(
+            total=Sum('cantidad')
+        )['total'] or 0
+    except:
+        total_camisetas = 0
+    
+    context = {
+        'total_camisetas': total_camisetas
+    }
+    
+    return render(request, 'mi_primer_app/mis_compras.html', context)
 
 # --- UTILIDAD PARA CARRITO ---
 def obtener_o_crear_carrito(usuario):
