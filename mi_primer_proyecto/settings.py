@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-f4vcn+)jtuvbh9lt%@h4ld6+b+r(7tby0ebrr7ggv2_$)$d(uv
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['127.0.0.1', 'localhost', 'testserver']
 
 
 # Application definition
@@ -37,6 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'ckeditor',
+    'ckeditor_uploader',
     'mi_primer_app',
     'pages.apps.PagesConfig',
     'accounts',
@@ -138,3 +140,13 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Silenciar warnings de sistema para ImageField
 SILENCED_SYSTEM_CHECKS = ['fields.E210']
+
+# CKEditor Configuration
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_CONFIGS = {
+    'default': {
+        'toolbar': 'full',
+        'height': 300,
+        'width': '100%',
+    },
+}

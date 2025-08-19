@@ -20,14 +20,17 @@ from django.contrib import admin
 from django.urls import path, include 
 from django.conf import settings
 from django.conf.urls.static import static
+from accounts import views as accounts_views
 
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', include('mi_primer_app.urls')),
+    path('about/', accounts_views.about, name='about'),  # Ruta about/ en raíz
     path('pages/', include('pages.urls')),
     path('accounts/', include('accounts.urls')),
     path('auth/', include('django.contrib.auth.urls')),  # Para login/logout built-in
+    path('ckeditor/', include('ckeditor_uploader.urls')),  # CKEditor URLs
 ]
 
 # Servir archivos media en desarrollo

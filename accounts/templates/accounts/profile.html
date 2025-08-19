@@ -62,6 +62,86 @@
                     
                     <hr>
                     
+                    <!-- Nueva sección: Estadísticas de Login -->
+                    <div class="row mt-4">
+                        <div class="col-md-12">
+                            <h5 class="text-success">
+                                <i class="fas fa-chart-line"></i> Estadísticas de Acceso
+                            </h5>
+                            <div class="row">
+                                <div class="col-md-3">
+                                    <div class="card bg-primary text-white">
+                                        <div class="card-body text-center">
+                                            <h4>{{ total_logins }}</h4>
+                                            <small>Total de Logins</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-info text-white">
+                                        <div class="card-body text-center">
+                                            <h6>{{ profile.last_login_ip|default:"N/A" }}</h6>
+                                            <small>Última IP</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-success text-white">
+                                        <div class="card-body text-center">
+                                            <h6>{{ user.last_login|date:"d/m/Y H:i"|default:"N/A" }}</h6>
+                                            <small>Último Login</small>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="card bg-warning text-white">
+                                        <div class="card-body text-center">
+                                            <h6>{{ first_login.login_time|date:"d/m/Y"|default:"N/A" }}</h6>
+                                            <small>Primer Login</small>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- Nueva sección: Historial de Logins Recientes -->
+                    {% if recent_logins %}
+                    <div class="mt-4">
+                        <h5 class="text-info">
+                            <i class="fas fa-history"></i> Últimos Accesos
+                        </h5>
+                        <div class="table-responsive">
+                            <table class="table table-sm table-striped">
+                                <thead>
+                                    <tr>
+                                        <th>Fecha y Hora</th>
+                                        <th>Dirección IP</th>
+                                        <th>Estado</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    {% for log in recent_logins %}
+                                    <tr>
+                                        <td>{{ log.login_time|date:"d/m/Y H:i:s" }}</td>
+                                        <td>{{ log.ip_address|default:"N/A" }}</td>
+                                        <td>
+                                            {% if log.success %}
+                                                <span class="badge badge-success">Exitoso</span>
+                                            {% else %}
+                                                <span class="badge badge-danger">Fallido</span>
+                                            {% endif %}
+                                        </td>
+                                    </tr>
+                                    {% endfor %}
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                    {% endif %}
+                    
+                    <hr>
+                    
                     <div class="text-center">
                         <a href="{% url 'mi_primer_app:home' %}" class="btn btn-primary">
                             <i class="fas fa-home"></i> Volver al Inicio
