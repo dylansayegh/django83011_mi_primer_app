@@ -13,14 +13,144 @@ import uuid
 
 # --- VISTAS PRINCIPALES ---
 def pagina_inicio(request):
-    """Vista de la página de inicio - versión básica"""
-    # No usar base de datos por ahora
-    return render(request, 'mi_primer_app/inicio.html')
+    """Vista de la página de inicio - con camisetas destacadas"""
+    # Camisetas destacadas para mostrar en la página principal
+    camisetas_destacadas = [
+        {
+            'id': 1,
+            'equipo': 'Selección Argentina',
+            'temporada': '1986 World Cup',
+            'precio': 89.99,
+            'precio_oferta': 79.99,
+            'imagen': 'images/camisetas/argentina_1986.jpg',
+            'descripcion': 'Camiseta icónica usada por Maradona en el Mundial de México 1986',
+            'jugador': 'MARADONA #10',
+            'marca': 'Le Coq Sportif',
+            'disponible': True
+        },
+        {
+            'id': 2,
+            'equipo': 'Real Madrid CF',
+            'temporada': '1998-2000',
+            'precio': 94.99,
+            'precio_oferta': 84.99,
+            'imagen': 'images/camisetas/real_madrid_1998.jpg',
+            'descripcion': 'Camiseta clásica del Real Madrid era pre-galácticos',
+            'jugador': 'RAÚL #7',
+            'marca': 'Adidas',
+            'disponible': True
+        },
+        {
+            'id': 3,
+            'equipo': 'FC Barcelona',
+            'temporada': '1992-1995',
+            'precio': 99.99,
+            'precio_oferta': 89.99,
+            'imagen': 'images/camisetas/barcelona_1992.jpg',
+            'descripcion': 'Camiseta histórica del Dream Team de Johan Cruyff',
+            'jugador': 'ROMÁRIO #11',
+            'marca': 'Kappa',
+            'disponible': True
+        }
+    ]
+    
+    context = {
+        'camisetas_destacadas': camisetas_destacadas,
+        'titulo': 'Camisetas Retro DS - Lo Mejor del Fútbol Clásico'
+    }
+    
+    return render(request, 'mi_primer_app/inicio.html', context)
 
 def pagina_camisetas(request):
-    """Vista del catálogo de camisetas - versión básica"""
-    # Template básico sin usar la base de datos por ahora
-    return render(request, 'mi_primer_app/camisetas_basico.html')
+    """Vista del catálogo de camisetas - con imágenes reales"""
+    # Catálogo completo de camisetas retro
+    camisetas_catalogo = [
+        {
+            'id': 1,
+            'equipo': 'Selección Argentina',
+            'temporada': '1986 World Cup',
+            'tipo': 'Local',
+            'precio': 89.99,
+            'precio_oferta': 79.99,
+            'imagen': 'images/camisetas/argentina_1986.jpg',
+            'descripcion': 'Camiseta icónica usada por Maradona en el Mundial de México 1986. La Mano de Dios y el Gol del Siglo.',
+            'jugador': 'MARADONA #10',
+            'marca': 'Le Coq Sportif',
+            'año': 1986,
+            'tallas': ['S', 'M', 'L', 'XL'],
+            'stock': 15,
+            'destacada': True,
+            'colores': 'Celeste y Azul',
+            'caracteristicas': [
+                'Rayas verticales icónicas',
+                'Cuello en V característico',
+                'Material 100% poliéster',
+                'Réplica oficial'
+            ]
+        },
+        {
+            'id': 2,
+            'equipo': 'Real Madrid CF',
+            'temporada': '1998-2000',
+            'tipo': 'Local',
+            'precio': 94.99,
+            'precio_oferta': 84.99,
+            'imagen': 'images/camisetas/real_madrid_1998.jpg',
+            'descripcion': 'Camiseta clásica del Real Madrid de la era pre-galácticos con el patrocinio histórico de Teka.',
+            'jugador': 'RAÚL #7',
+            'marca': 'Adidas',
+            'año': 1998,
+            'tallas': ['S', 'M', 'L', 'XL'],
+            'stock': 12,
+            'destacada': True,
+            'colores': 'Blanco',
+            'caracteristicas': [
+                'Diseño clásico madridista',
+                'Patrocinio Teka histórico',
+                'Tres rayas Adidas',
+                'Era Raúl y Roberto Carlos'
+            ]
+        },
+        {
+            'id': 3,
+            'equipo': 'FC Barcelona',
+            'temporada': '1992-1995',
+            'tipo': 'Local',
+            'precio': 99.99,
+            'precio_oferta': 89.99,
+            'imagen': 'images/camisetas/barcelona_1992.jpg',
+            'descripcion': 'Camiseta histórica del legendario Dream Team de Johan Cruyff que revolucionó el fútbol mundial.',
+            'jugador': 'ROMÁRIO #11',
+            'marca': 'Kappa',
+            'año': 1992,
+            'tallas': ['S', 'M', 'L', 'XL'],
+            'stock': 8,
+            'destacada': True,
+            'colores': 'Azul y Rojo (Blaugrana)',
+            'caracteristicas': [
+                'Rayas blaugrana clásicas',
+                'Era del Dream Team',
+                'Marca Kappa vintage',
+                'Romário, Stoichkov, Guardiola'
+            ]
+        }
+    ]
+    
+    # Filtros disponibles
+    equipos = list(set([c['equipo'] for c in camisetas_catalogo]))
+    marcas = list(set([c['marca'] for c in camisetas_catalogo]))
+    años = list(set([c['año'] for c in camisetas_catalogo]))
+    
+    context = {
+        'camisetas': camisetas_catalogo,
+        'equipos': equipos,
+        'marcas': marcas,
+        'años': sorted(años),
+        'total_camisetas': len(camisetas_catalogo),
+        'titulo': 'Catálogo de Camisetas Retro'
+    }
+    
+    return render(request, 'mi_primer_app/camisetas_basico.html', context)
 
 def detalle_camiseta(request, camiseta_id):
     """Vista de detalle de una camiseta específica"""

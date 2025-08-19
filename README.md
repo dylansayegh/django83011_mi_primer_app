@@ -33,12 +33,53 @@
 - ✅ Control de órdenes
 - ✅ Estadísticas de ventas
 
-## 📸 Screenshots
+## 📸 Screenshots y Productos Destacados
 
 ### 🏠 Página Principal
 ![Inicio](https://via.placeholder.com/800x400/007bff/ffffff?text=CAMISETAS+RETRO+DS+HOME)
 
-### 👕 Catálogo de Productos
+### 👕 Camisetas Retro Destacadas
+
+#### 🔵 Argentina 1986 - Le Coq Sportif
+La icónica camiseta de la selección argentina que Diego Maradona usó en el Mundial de México 1986. Con sus distintivas rayas verticales en azul y celeste, esta camiseta representa uno de los momentos más gloriosos del fútbol mundial.
+
+<img src="./static/images/camisetas/argentina_1986.jpg" alt="Camiseta Argentina 1986" width="300" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+**Características:**
+- 🏆 **Equipo:** Selección Argentina
+- 📅 **Año:** 1986
+- 👕 **Marca:** Le Coq Sportif
+- ⭐ **Estrella:** Diego Armando Maradona
+
+---
+
+#### ⚪ Real Madrid 1998-2000 - Adidas Teka
+La elegante camiseta blanca del Real Madrid de finales de los 90s, con el patrocinio de Teka. Una época dorada con galácticos como Raúl, Roberto Carlos y la llegada de futuras leyendas.
+
+<img src="./static/images/camisetas/real_madrid_1998.jpg" alt="Camiseta Real Madrid 1998-2000" width="300" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+**Características:**
+- 🏆 **Club:** Real Madrid CF
+- 📅 **Temporada:** 1998-2000
+- 👕 **Marca:** Adidas
+- 💼 **Patrocinador:** Teka
+- ⭐ **Estrellas:** Raúl, Roberto Carlos, Fernando Redondo
+
+---
+
+#### 🔴🔵 FC Barcelona 1992-1995 - Kappa
+La histórica camiseta del "Dream Team" de Johan Cruyff. Las icónicas rayas blaugrana que vistieron Romário, Stoichkov, Guardiola y compañía durante una de las épocas más brillantes del fútbol catalán.
+
+<img src="./static/images/camisetas/barcelona_1992.jpg" alt="Camiseta FC Barcelona 1992-1995" width="300" style="border-radius: 10px; box-shadow: 0 4px 8px rgba(0,0,0,0.1);">
+
+**Características:**
+- 🏆 **Club:** FC Barcelona
+- 📅 **Temporada:** 1992-1995
+- 👕 **Marca:** Kappa
+- 🏆 **Logros:** Liga de Campeones 1992, 4 Ligas consecutivas
+- ⭐ **Dream Team:** Romário, Stoichkov, Guardiola, Koeman
+
+### 🛒 Catálogo de Productos
 ![Catálogo](https://via.placeholder.com/800x400/28a745/ffffff?text=CATALOGO+CAMISETAS+RETRO)
 
 ### 🛒 Carrito de Compras

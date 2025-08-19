@@ -142,6 +142,90 @@
                 <a href="{% url 'accounts:signup' %}" class="alert-link">crea una cuenta</a>.
             </div>
             {% endif %}
+
+            <!-- Sección de Camisetas Destacadas -->
+            {% if camisetas_destacadas %}
+            <div class="card mt-4">
+                <div class="card-header bg-primary text-white">
+                    <h3 class="mb-0">
+                        <i class="fas fa-star"></i> Camisetas Retro Destacadas
+                    </h3>
+                </div>
+                <div class="card-body">
+                    <div class="row">
+                        {% for camiseta in camisetas_destacadas %}
+                        <div class="col-md-4 mb-4">
+                            <div class="card h-100 camiseta-card">
+                                <!-- Imagen de la camiseta -->
+                                <img src="{% load static %}{% static camiseta.imagen %}" 
+                                     alt="{{ camiseta.equipo }} {{ camiseta.temporada }}"
+                                     class="card-img-top camiseta-img"
+                                     style="height: 250px; object-fit: contain; background: #f8f9fa;">
+                                
+                                <div class="card-body d-flex flex-column">
+                                    <!-- Título -->
+                                    <h5 class="card-title text-primary">
+                                        {{ camiseta.equipo }}
+                                    </h5>
+                                    
+                                    <!-- Temporada y jugador -->
+                                    <p class="card-text">
+                                        <strong>{{ camiseta.temporada }}</strong><br>
+                                        <small class="text-muted">{{ camiseta.jugador }} - {{ camiseta.marca }}</small>
+                                    </p>
+                                    
+                                    <!-- Descripción -->
+                                    <p class="card-text flex-grow-1">
+                                        {{ camiseta.descripcion|truncatewords:15 }}
+                                    </p>
+                                    
+                                    <!-- Precio -->
+                                    <div class="mt-auto">
+                                        <div class="d-flex justify-content-between align-items-center mb-3">
+                                            {% if camiseta.precio_oferta %}
+                                                <div>
+                                                    <span class="badge badge-danger">OFERTA</span><br>
+                                                    <span class="h5 text-success">${{ camiseta.precio_oferta }}</span>
+                                                    <small class="text-muted"><s>${{ camiseta.precio }}</s></small>
+                                                </div>
+                                            {% else %}
+                                                <span class="h5 text-primary">${{ camiseta.precio }}</span>
+                                            {% endif %}
+                                            
+                                            {% if camiseta.disponible %}
+                                                <span class="badge badge-success">Disponible</span>
+                                            {% else %}
+                                                <span class="badge badge-secondary">Agotado</span>
+                                            {% endif %}
+                                        </div>
+                                        
+                                        <!-- Botones -->
+                                        <div class="btn-group w-100" role="group">
+                                            <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-outline-primary btn-sm">
+                                                <i class="fas fa-eye"></i> Ver Más
+                                            </a>
+                                            {% if camiseta.disponible %}
+                                            <button class="btn btn-primary btn-sm">
+                                                <i class="fas fa-shopping-cart"></i> Agregar
+                                            </button>
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {% endfor %}
+                    </div>
+                    
+                    <!-- Botón para ver todas -->
+                    <div class="text-center mt-4">
+                        <a href="{% url 'mi_primer_app:camisetas' %}" class="btn btn-lg btn-primary">
+                            <i class="fas fa-tshirt"></i> Ver Catálogo Completo
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% endif %}
         </div>
     </div>
 </div>
@@ -166,6 +250,34 @@
 
 .btn:hover {
     transform: translateY(-1px);
+}
+
+.camiseta-card {
+    transition: all 0.3s ease;
+    border: 1px solid #e0e0e0;
+}
+
+.camiseta-card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.2);
+    border-color: #007bff;
+}
+
+.camiseta-img {
+    transition: transform 0.3s ease;
+    border-bottom: 1px solid #e0e0e0;
+}
+
+.camiseta-card:hover .camiseta-img {
+    transform: scale(1.05);
+}
+
+.badge {
+    font-size: 0.8em;
+}
+
+.btn-group .btn {
+    font-size: 0.85em;
 }
 </style>
 {% endblock %}
