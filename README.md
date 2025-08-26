@@ -8,30 +8,30 @@
 
 ## 🌟 Características Principales
 
-### 🛒 **E-commerce Completo**
-- ✅ Catálogo de camisetas retro con filtros
-- ✅ Carrito de compras en tiempo real
-- ✅ Sistema de órdenes y checkout
-- ✅ Gestión de stock automática
-- ✅ Ofertas y descuentos
+### 🛒 **E-commerce Base**
+- ✅ Página principal con camisetas destacadas
+- ✅ Sistema de autenticación completo
+- ✅ Dashboard de usuario con historial de compras
+- ✅ Filtros interactivos y funcionales
+- ✅ Gestión de usuarios y perfiles
 
 ### 👤 **Gestión de Usuarios**
 - ✅ Registro y autenticación
-- ✅ Perfil personalizado con avatar
-- ✅ Historial de compras
-- ✅ Sistema de sesiones
+- ✅ Perfil personalizado con tracking de login
+- ✅ Dashboard de "Mis Compras" 
+- ✅ Sistema de sesiones seguro
 
 ### 📱 **Diseño Responsive**
-- ✅ Bootstrap 5.1.3
+- ✅ Bootstrap 5 completamente integrado
 - ✅ Font Awesome icons
-- ✅ JavaScript interactivo
+- ✅ JavaScript interactivo con filtros
 - ✅ Optimizado para móviles
 
 ### 🔧 **Panel de Administración**
 - ✅ Django Admin personalizado
 - ✅ Gestión de productos
-- ✅ Control de órdenes
-- ✅ Estadísticas de ventas
+- ✅ Control de usuarios
+- ✅ Modelos de datos relacionales
 
 ## 📸 Screenshots y Productos Destacados
 
@@ -78,15 +78,6 @@ La histórica camiseta del "Dream Team" de Johan Cruyff. Las icónicas rayas bla
 - 👕 **Marca:** Kappa
 - 🏆 **Logros:** Liga de Campeones 1992, 4 Ligas consecutivas
 - ⭐ **Dream Team:** Romário, Stoichkov, Guardiola, Koeman
-
-### 🛒 Catálogo de Productos
-![Catálogo](https://via.placeholder.com/800x400/28a745/ffffff?text=CATALOGO+CAMISETAS+RETRO)
-
-### 🛒 Carrito de Compras
-![Carrito](https://via.placeholder.com/800x400/ffc107/000000?text=CARRITO+DE+COMPRAS)
-
-### 👤 Panel de Usuario
-![Perfil](https://via.placeholder.com/800x400/6f42c1/ffffff?text=PERFIL+DE+USUARIO)
 
 ## 🚀 Instalación y Configuración
 
@@ -142,22 +133,21 @@ django83011_mi_primer_app/
 └── 📖 README.md              # Esta documentación
 ```
 
-## ⚽ Funcionalidades del E-commerce
+## ⚽ Funcionalidades Implementadas
 
-### 🛍️ **Para Clientes**
-- 🔍 Búsqueda y filtrado de camisetas
-- 👕 Catálogo con ofertas y descuentos
-- 🛒 Carrito dinámico con AJAX
-- 💳 Proceso de checkout completo
-- 📋 Historial de órdenes
-- 👤 Perfil personalizado
+### 🛍️ **Para Usuarios**
+- 🏠 Página principal con camisetas destacadas
+- � Sistema de registro y login completo
+- � Dashboard "Mis Compras" con historial
+- � Filtros interactivos (Todos/Completados/Pendientes)
+- 🎨 Diseño responsive y moderno
 
 ### 🔧 **Para Administradores**
-- 📦 Gestión de inventario
-- 📈 Control de órdenes
-- 👥 Administración de usuarios
-- 💰 Seguimiento de ventas
-- 🏷️ Gestión de ofertas
+- 📦 Panel de administración Django
+- � Gestión de usuarios y perfiles
+- � Tracking de logins con IP y timestamps
+- 🎯 Modelos de datos relacionales
+- 🔐 Sistema de permisos integrado
 
 ## 🎨 Características del Diseño
 
@@ -167,12 +157,13 @@ django83011_mi_primer_app/
 - ✅ **Accessibility** - Diseño accesible para todos
 - ✅ **Modern UI** - Interfaz moderna con Bootstrap 5
 
-## 🔄 API y Funcionalidades AJAX
+## 🔄 JavaScript y Funcionalidades Dinámicas
 
-- 🔄 **Carrito en tiempo real** - Sin recargar página
-- 🔍 **Búsqueda instantánea** - Filtros dinámicos
-- 📊 **Contador dinámico** - Actualización automática
-- ⚡ **Carga asíncrona** - Mejor experiencia de usuario
+- � **Filtros funcionales** - Botones Todos/Completados/Pendientes
+- ⚡ **Animaciones CSS** - Transiciones suaves en filtrados
+- 🎯 **Event listeners** - Interactividad sin recargar página
+- 📊 **Estado dinámico** - Actualización visual de estados
+- 🎨 **UX mejorada** - Feedback visual inmediato
 
 ## 📞 Contacto y Soporte
 
