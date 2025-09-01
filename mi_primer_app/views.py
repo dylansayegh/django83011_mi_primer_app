@@ -14,53 +14,12 @@ import uuid
 
 # --- VISTAS PRINCIPALES ---
 def pagina_inicio(request):
-    """Vista de la página de inicio - con camisetas destacadas"""
-    # Camisetas destacadas para mostrar en la página principal
-    camisetas_destacadas = [
-        {
-            'id': 1,
-            'equipo': 'Selección Argentina',
-            'temporada': '1986 World Cup',
-            'precio': 89.99,
-            'precio_oferta': 79.99,
-            'imagen': 'images/camisetas/argentina_1986.jpg',
-            'descripcion': 'Camiseta icónica usada por Maradona en el Mundial de México 1986',
-            'jugador': 'MARADONA #10',
-            'marca': 'Le Coq Sportif',
-            'disponible': True
-        },
-        {
-            'id': 2,
-            'equipo': 'Real Madrid CF',
-            'temporada': '1998-2000',
-            'precio': 94.99,
-            'precio_oferta': 84.99,
-            'imagen': 'images/camisetas/real_madrid_1998.jpg',
-            'descripcion': 'Camiseta clásica del Real Madrid era pre-galácticos',
-            'jugador': 'RAÚL #7',
-            'marca': 'Adidas',
-            'disponible': True
-        },
-        {
-            'id': 3,
-            'equipo': 'FC Barcelona',
-            'temporada': '1992-1995',
-            'precio': 99.99,
-            'precio_oferta': 89.99,
-            'imagen': 'images/camisetas/barcelona_1992.jpg',
-            'descripcion': 'Camiseta histórica del Dream Team de Johan Cruyff',
-            'jugador': 'ROMÁRIO #11',
-            'marca': 'Kappa',
-            'disponible': True
-        }
-    ]
-    
-    context = {
-        'camisetas_destacadas': camisetas_destacadas,
-        'titulo': 'Camisetas Retro DS - Lo Mejor del Fútbol Clásico'
-    }
-    
-    return render(request, 'mi_primer_app/inicio.html', context)
+    """Vista de la página de inicio - simple y funcional"""
+    return render(request, 'mi_primer_app/inicio.html')
+
+def tienda(request):
+    """Vista de la tienda con camisetas disponibles"""
+    return render(request, 'mi_primer_app/tienda.html')
 
 def pagina_camisetas(request):
     """Vista del catálogo de camisetas - con imágenes reales"""
@@ -242,41 +201,114 @@ def obtener_o_crear_carrito(usuario):
     carrito, created = Carrito.objects.get_or_create(usuario=usuario)
     return carrito
 
+@login_required
 def ver_carrito(request):
-    """Vista para mostrar el contenido del carrito - versión básica"""
-    # Template básico sin usar la base de datos por ahora
-    return render(request, 'mi_primer_app/carrito_simple.html')
+    """Ver contenido del carrito"""
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+        items = carrito.items.all()
+        context = {
+            'carrito': carrito,
+            'items': items,
+            'total_items': carrito.cantidad_items(),
+            'total_precio': carrito.calcular_total()
+        }
+    except Carrito.DoesNotExist:
+        context = {
+            'carrito': None,
+            'items': [],
+            'total_items': 0,
+            'total_precio': 0
+        }
+    
+    return render(request, 'mi_primer_app/carrito.html', context)
 
 @login_required
 @require_POST
-def agregar_al_carrito(request, camiseta_id):
-    """Vista para agregar camiseta al carrito"""
-    camiseta = get_object_or_404(Camiseta, id=camiseta_id, activa=True)
-    carrito = obtener_o_crear_carrito(request.user)
-    cantidad = int(request.POST.get('cantidad', 1))
-    
-    if cantidad > camiseta.stock:
-        messages.error(request, f'No hay suficiente stock. Stock disponible: {camiseta.stock}')
-        return redirect('mi_primer_app:detalle_camiseta', camiseta_id=camiseta_id)
-    
-    item, created = ItemCarrito.objects.get_or_create(
-        carrito=carrito,
-        camiseta=camiseta,
-        defaults={'cantidad': cantidad}
-    )
-    
-    if not created:
-        nueva_cantidad = item.cantidad + cantidad
-        if nueva_cantidad > camiseta.stock:
-            messages.error(request, f'No hay suficiente stock. Stock disponible: {camiseta.stock}')
-            return redirect('mi_primer_app:detalle_camiseta', camiseta_id=camiseta_id)
-        item.cantidad = nueva_cantidad
-        item.save()
-        messages.success(request, f'Cantidad actualizada en el carrito: {item.cantidad} x {camiseta.equipo}')
-    else:
-        messages.success(request, f'Camiseta agregada al carrito: {cantidad} x {camiseta.equipo}')
-    
-    return redirect('mi_primer_app:ver_carrito')
+def agregar_al_carrito(request):
+    """Vista para agregar camiseta al carrito - versión unificada"""
+    try:
+        # Obtener datos del formulario - soportar ambos formatos
+        nombre = request.POST.get('nombre')  # Formato desde /camisetas/
+        precio_str = request.POST.get('precio')
+        cantidad = int(request.POST.get('cantidad', 1))
+        
+        # Si no hay nombre, probar formato alternativo
+        if not nombre:
+            equipo = request.POST.get('equipo')
+            temporada = request.POST.get('temporada')
+            if equipo and temporada:
+                nombre = f"{equipo} {temporada}"
+        
+        if not all([nombre, precio_str]):
+            messages.error(request, 'Error: Datos incompletos')
+            return redirect('mi_primer_app:ver_carrito')
+        
+        precio = float(precio_str)
+        
+        # Separar nombre en equipo y temporada si es necesario
+        if ' ' in nombre:
+            partes = nombre.split()
+            if len(partes) >= 2:
+                equipo = ' '.join(partes[:-1])
+                temporada = partes[-1]
+            else:
+                equipo = nombre
+                temporada = 'Retro'
+        else:
+            equipo = nombre
+            temporada = 'Retro'
+        
+        # Crear o buscar camiseta
+        camiseta, created = Camiseta.objects.get_or_create(
+            equipo=equipo,
+            temporada=temporada,
+            defaults={
+                'precio': precio,
+                'stock': 10,  # Stock por defecto
+                'activa': True,
+                'talla': 'M',
+                'descripcion': f'Camiseta {equipo} {temporada}'
+            }
+        )
+        
+        # Obtener carrito del usuario
+        carrito = obtener_o_crear_carrito(request.user)
+        
+        # DEBUG: Log para ver qué está pasando
+        print(f"DEBUG: Usuario {request.user.username} agregando {equipo} {temporada} al carrito")
+        
+        # Buscar si ya existe el item
+        try:
+            item = ItemCarrito.objects.get(carrito=carrito, camiseta=camiseta)
+            # Si existe, actualizar cantidad
+            item.cantidad += cantidad
+            item.save()
+            message = f'Cantidad actualizada: {item.cantidad} x {camiseta.equipo} {camiseta.temporada}'
+            print(f"DEBUG: Item actualizado - nueva cantidad: {item.cantidad}")
+        except ItemCarrito.DoesNotExist:
+            # Si no existe, crear nuevo
+            item = ItemCarrito.objects.create(
+                carrito=carrito,
+                camiseta=camiseta,
+                cantidad=cantidad
+            )
+            message = f'{camiseta.equipo} {camiseta.temporada} agregado al carrito'
+            print(f"DEBUG: Nuevo item creado - ID: {item.id}")
+        
+        # Verificar que se guardó
+        total_items_db = carrito.items.count()
+        total_cantidad = sum(i.cantidad for i in carrito.items.all())
+        print(f"DEBUG: Items en carrito después de agregar: {total_items_db} (cantidad total: {total_cantidad})")
+        
+        # Mensaje de éxito y redirección DIRECTA AL CARRITO
+        messages.success(request, message)
+        return redirect('mi_primer_app:ver_carrito')
+        
+    except Exception as e:
+        print(f"DEBUG ERROR: {e}")
+        messages.error(request, f'Error al agregar al carrito: {str(e)}')
+        return redirect('mi_primer_app:ver_carrito')
 
 @login_required
 @require_POST
@@ -319,7 +351,7 @@ def checkout(request):
         # Crear orden
         orden = Orden.objects.create(
             usuario=request.user,
-            total=carrito.total_precio,
+            total=carrito.calcular_total(),
             direccion_envio=request.POST.get('direccion'),
             ciudad=request.POST.get('ciudad'),
             codigo_postal=request.POST.get('codigo_postal'),
@@ -338,7 +370,7 @@ def checkout(request):
                 },
                 cantidad=item.cantidad,
                 precio_unitario=item.camiseta.precio_final,
-                subtotal=item.subtotal
+                subtotal=item.subtotal()
             )
             
             # Reducir stock
@@ -354,7 +386,7 @@ def checkout(request):
     context = {
         'carrito': carrito,
         'items': carrito.items.all(),
-        'total_precio': carrito.total_precio,
+        'total': carrito.calcular_total(),
     }
     return render(request, 'mi_primer_app/checkout.html', context)
 
@@ -406,3 +438,14 @@ def agregar_cliente(request):
 def hola_mundo(request):
     """Vista simple de prueba"""
     return HttpResponse("¡Hola Mundo desde Django!")
+
+@login_required
+def obtener_cantidad_carrito(request):
+    """API para obtener la cantidad actual del carrito"""
+    try:
+        carrito = Carrito.objects.get(usuario=request.user)
+        cantidad = carrito.cantidad_items()
+    except Carrito.DoesNotExist:
+        cantidad = 0
+    
+    return JsonResponse({'cart_count': cantidad})

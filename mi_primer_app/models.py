@@ -50,43 +50,6 @@ class Camiseta(models.Model):
             return int(((self.precio - self.precio_oferta) / self.precio) * 100)
         return 0
 
-# Modelo para el carrito de compras
-class Carrito(models.Model):
-    usuario = models.OneToOneField(User, on_delete=models.CASCADE)
-    fecha_creacion = models.DateTimeField(auto_now_add=True)
-    fecha_actualizacion = models.DateTimeField(auto_now=True)
-
-    def __str__(self):
-        return f"Carrito de {self.usuario.username}"
-    
-    @property
-    def total_items(self):
-        return sum(item.cantidad for item in self.items.all())
-    
-    @property
-    def total_precio(self):
-        return sum(item.subtotal for item in self.items.all())
-    
-    def limpiar(self):
-        self.items.all().delete()
-
-# Modelo para items del carrito
-class ItemCarrito(models.Model):
-    carrito = models.ForeignKey(Carrito, related_name='items', on_delete=models.CASCADE)
-    camiseta = models.ForeignKey(Camiseta, on_delete=models.CASCADE)
-    cantidad = models.PositiveIntegerField(default=1)
-    fecha_agregado = models.DateTimeField(auto_now_add=True)
-
-    class Meta:
-        unique_together = ('carrito', 'camiseta')
-
-    def __str__(self):
-        return f"{self.cantidad} x {self.camiseta}"
-    
-    @property
-    def subtotal(self):
-        return self.cantidad * self.camiseta.precio_final
-
 # Modelo para órdenes de compra
 class Orden(models.Model):
     ESTADOS = [
@@ -154,4 +117,42 @@ class Cliente(models.Model):
 
     def __str__(self):
         return f"{self.nombre} {self.apellido}"
+
+# Modelo para carrito de compras
+class Carrito(models.Model):
+    usuario = models.OneToOneField(User, on_delete=models.CASCADE, related_name='carrito')
+    fecha_creacion = models.DateTimeField(auto_now_add=True)
+    fecha_actualizacion = models.DateTimeField(auto_now=True)
+    
+    def __str__(self):
+        return f"Carrito de {self.usuario.username}"
+    
+    def calcular_total(self):
+        return sum(item.subtotal() for item in self.items.all())
+    
+    def cantidad_items(self):
+        return sum(item.cantidad for item in self.items.all())
+    
+    def esta_vacio(self):
+        return self.items.count() == 0
+    
+    def limpiar(self):
+        """Elimina todos los items del carrito"""
+        self.items.all().delete()
+
+# Modelo para items del carrito
+class ItemCarrito(models.Model):
+    carrito = models.ForeignKey(Carrito, on_delete=models.CASCADE, related_name='items')
+    camiseta = models.ForeignKey(Camiseta, on_delete=models.CASCADE)
+    cantidad = models.PositiveIntegerField(default=1)
+    fecha_agregado = models.DateTimeField(auto_now_add=True)
+    
+    def __str__(self):
+        return f"{self.cantidad} x {self.camiseta.equipo} en carrito de {self.carrito.usuario.username}"
+    
+    def subtotal(self):
+        return self.cantidad * self.camiseta.precio_final
+    
+    class Meta:
+        unique_together = ('carrito', 'camiseta')
   

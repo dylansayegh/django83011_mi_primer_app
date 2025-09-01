@@ -29,7 +29,7 @@ class ItemCarritoInline(admin.TabularInline):
 
 @admin.register(Carrito)
 class CarritoAdmin(admin.ModelAdmin):
-    list_display = ['usuario', 'total_items', 'total_precio', 'fecha_creacion']
+    list_display = ['usuario', 'cantidad_items', 'calcular_total', 'fecha_creacion']
     search_fields = ['usuario__username']
     readonly_fields = ['fecha_creacion', 'fecha_actualizacion']
     inlines = [ItemCarritoInline]

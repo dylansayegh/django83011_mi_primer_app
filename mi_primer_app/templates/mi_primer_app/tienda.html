@@ -1,0 +1,99 @@
+{% extends 'mi_primer_app/padre.html' %}
+
+{% block titulo %}Tienda - CAMISETAS RETRO DS{% endblock %}
+
+{% block contenido %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-12">
+            <h1 class="text-center mb-4">🏆 Tienda de Camisetas Retro</h1>
+            
+            {% if messages %}
+                {% for message in messages %}
+                <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    {{ message }}
+                    <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+                </div>
+                {% endfor %}
+            {% endif %}
+        </div>
+    </div>
+    
+    <div class="row">
+        <!-- Camiseta 1: Real Madrid -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🏆 Real Madrid 1998</h5>
+                    <p class="card-text">Camiseta clásica del Real Madrid era pre-galácticos. Adidas original.</p>
+                    <p class="text-success"><strong>$79.99</strong></p>
+                    
+                    <form method="post" action="{% url 'mi_primer_app:agregar_al_carrito' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="equipo" value="Real Madrid">
+                        <input type="hidden" name="temporada" value="1998">
+                        <input type="hidden" name="precio" value="79.99">
+                        <input type="hidden" name="cantidad" value="1">
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Camiseta 2: Barcelona -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🔴🔵 Barcelona 1992</h5>
+                    <p class="card-text">Camiseta histórica del Dream Team de Johan Cruyff. Kappa original.</p>
+                    <p class="text-success"><strong>$69.99</strong></p>
+                    
+                    <form method="post" action="{% url 'mi_primer_app:agregar_al_carrito' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="equipo" value="Barcelona">
+                        <input type="hidden" name="temporada" value="1992">
+                        <input type="hidden" name="precio" value="69.99">
+                        <input type="hidden" name="cantidad" value="1">
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Camiseta 3: Argentina -->
+        <div class="col-md-4 mb-4">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h5 class="card-title">🇦🇷 Argentina 1986</h5>
+                    <p class="card-text">¡LA CAMISETA DE MARADONA! Mundial México 1986. Le Coq Sportif.</p>
+                    <p class="text-warning"><strong>$129.99</strong></p>
+                    
+                    <form method="post" action="{% url 'mi_primer_app:agregar_al_carrito' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="equipo" value="Argentina">
+                        <input type="hidden" name="temporada" value="1986">
+                        <input type="hidden" name="precio" value="129.99">
+                        <input type="hidden" name="cantidad" value="1">
+                        
+                        <button type="submit" class="btn btn-success w-100">
+                            <i class="fas fa-shopping-cart"></i> Agregar al Carrito
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <div class="text-center mt-4">
+        <a href="{% url 'mi_primer_app:ver_carrito' %}" class="btn btn-warning btn-lg">
+            <i class="fas fa-shopping-cart"></i> Ver Mi Carrito
+        </a>
+    </div>
+</div>
+{% endblock %}

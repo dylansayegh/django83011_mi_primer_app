@@ -1,0 +1,22 @@
+"""
+SOLUCIÓN PARA ELIMINAR LA ADVERTENCIA DE MIGRACIONES
+
+Si quieres eliminar completamente la advertencia:
+"""
+
+# 1. Parar el servidor (Ctrl+C)
+
+# 2. Ejecutar en terminal:
+# python manage.py migrate --fake-initial
+
+# 3. O ejecutar:
+# python manage.py migrate mi_primer_app --fake
+
+# 4. Reiniciar servidor:
+# python manage.py runserver
+
+# ALTERNATIVA: Agregar esta configuración en settings.py
+MIGRATION_CHECK_DISABLED = True
+
+# O usar el flag --no-migrations-check al ejecutar runserver:
+# python manage.py runserver --no-migrations-check
